@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: inspire-be
+
+  profiles:
+    active: local
+
+  # oauth2 client configuration if needed
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+  endpoint:
+    health:
+      show-details: always
+
+jwt:
+  access:
+    secret: test
+    expires: 1800
+  refresh:
+    secret: test
+    expires: 1209600

@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '4.0.1'
+    id 'org.springframework.boot' version '4.0.2'
     id 'io.spring.dependency-management' version '1.1.7'
 }
 
@@ -19,14 +19,21 @@ repositories {
 }
 
 dependencies {
+
     // Lombok
-    implementation 'org.projectlombok:lombok'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
 
     // Spring Configuration
     implementation 'org.springframework.boot:spring-boot-configuration-processor'
 
+    // Spring Actuator
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
     // Spring Web MVC
-    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-webmvc'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
     // Spring Security
@@ -34,8 +41,10 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security-oauth2-client'
 
     // Spring DB-related libraries
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+    implementation 'org.springframework.boot:spring-boot-h2console'
     runtimeOnly 'com.h2database:h2'
 
     // Testing Libraries
