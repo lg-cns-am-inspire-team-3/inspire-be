@@ -1,18 +1,17 @@
 package com.inspire.inspirebe.user.dto;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @NoArgsConstructor
 @Getter
 @Setter
 public class UserResponseDTO {
-    private String id;
+    private Long id;
     private String loginId;
     private String email;
     private String name;
@@ -20,14 +19,14 @@ public class UserResponseDTO {
     private String address;
     private List<AttendanceDTO> attendances;
 
-    @NoArgsConstructor
-    @Getter
-    @Setter
-    public static class AttendanceDTO {
-        private LocalDate workDate;
-        private LocalDateTime checkIn;
-        private LocalDateTime checkOut;
-        private LocalDateTime totalTime;
-        private Integer totalAmount;
+    @Builder
+    public UserResponseDTO(Long id, String loginId, String email, String name, String contact, String address, List<AttendanceDTO> attendances) {
+        this.id = id;
+        this.loginId = loginId;
+        this.email = email;
+        this.name = name;
+        this.contact = contact;
+        this.address = address;
+        this.attendances = attendances;
     }
 }
