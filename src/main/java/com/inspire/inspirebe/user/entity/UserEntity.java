@@ -5,9 +5,7 @@ import com.inspire.inspirebe.common.entity.BaseEntity;
 import com.inspire.inspirebe.user.entity.enums.UserRole;
 import com.inspire.inspirebe.user.entity.enums.UserStatus;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*; 
 
 import java.util.List;
 
@@ -15,6 +13,8 @@ import java.util.List;
 @Table(name = "users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@AllArgsConstructor 
+@Builder 
 public class UserEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
