@@ -2,15 +2,19 @@ package com.inspire.inspirebe.user.entity;
 
 import com.inspire.inspirebe.common.entity.BaseEntity;
 import com.inspire.inspirebe.user.entity.enums.UserRole;
+import com.inspire.inspirebe.user.entity.enums.UserStatus;
+
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Setter
 public class UserEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,4 +41,7 @@ public class UserEntity extends BaseEntity {
 
     @Column(name = "salary")
     private Integer salary;
+
+    @Enumerated(EnumType.STRING)
+    private UserStatus status;
 }
