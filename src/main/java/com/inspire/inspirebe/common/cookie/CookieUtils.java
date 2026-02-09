@@ -27,8 +27,6 @@ public class CookieUtils {
                         .filter(cookie -> cookie.getName().equals(name))
                         .forEach(cookie -> {
                             cookie.setValue("");
-                            cookie.setDomain(domain);
-                            cookie.setPath(path);
                             cookie.setMaxAge(0);
                             response.addCookie(cookie);
                         }));
