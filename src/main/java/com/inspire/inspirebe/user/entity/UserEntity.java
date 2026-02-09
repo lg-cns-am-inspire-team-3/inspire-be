@@ -3,14 +3,14 @@ package com.inspire.inspirebe.user.entity;
 import com.inspire.inspirebe.common.entity.BaseEntity;
 import com.inspire.inspirebe.user.entity.enums.UserRole;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*; 
 
 @Entity
 @Table(name = "users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@AllArgsConstructor 
+@Builder 
 public class UserEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
