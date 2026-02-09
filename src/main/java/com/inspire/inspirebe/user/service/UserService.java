@@ -19,13 +19,18 @@ public interface UserService {
     boolean isIdDuplicated(String loginId);
 
     // --- 조장님이 추가하신 CRUD 메서드들을 하나의 중괄호 안으로 합칩니다 ---
-
     // Read
     UserResponseDTO getUser(Long id);
+
+    String getUserRole(Long id);
 
     // Update
     void updateUser(Long id, UserUpdateDTO userUpdateDTO);
 
+    void updatePassword(Long id, String oldPassword, String newPassword);
+
     // Delete
     void deleteUser(Long id);
+
+    Long validateCredentials(String loginId, String password);
 }

@@ -24,9 +24,6 @@ public class UserEntity extends BaseEntity {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Attend> attendances;
 
-    @Column(name = "login_id", nullable = false)
-    private String loginId;
-
     @Column(name = "email", nullable = false)
     private String email;
 
@@ -52,10 +49,9 @@ public class UserEntity extends BaseEntity {
 
 
     @Builder
-    public UserEntity(Long id, List<Attend> attendances, String loginId, String email, String name, String contact, String address, UserRole role, UserStatus status, Integer salary) {
+    public UserEntity(Long id, List<Attend> attendances, String email, String name, String contact, String address, UserRole role, UserStatus status, Integer salary) {
         this.id = id;
         this.attendances = attendances;
-        this.loginId = loginId;
         this.email = email;
         this.name = name;
         this.contact = contact;

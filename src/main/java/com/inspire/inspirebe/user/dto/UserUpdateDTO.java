@@ -9,7 +9,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UserUpdateDTO {
-    private Update<String> password;
     private Update<String> name;
     private Update<String> contact;
     private Update<String> email;

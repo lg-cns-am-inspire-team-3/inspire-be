@@ -1,6 +1,5 @@
 package com.inspire.inspirebe.common.jwt;
 
-import com.inspire.inspirebe.user.entity.enums.UserRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -53,12 +52,9 @@ public class JwtProvider {
      * role: USER 또는 ADMIN
      */
 
-    public String createAccessToken(String loginId, String userId, UserRole role) {
-        Claims claims = Jwts.claims().setSubject(loginId);
-        claims.put("userId", userId);
-        claims.put("role", role.name());
-
-        long now = System.currentTimeMillis();
+    public String createAccessToken(Long userId, String role, long now) {
+        Claims claims = Jwts.claims().setSubject(String.valueOf(userId));
+        claims.put("role", role);
 
         return Jwts.builder()
                 .setClaims(claims)
@@ -73,9 +69,7 @@ public class JwtProvider {
      * sub: PK (access token과 목적을 달리함)
      */
 
-    public String createRefreshToken(String userId) {
-
-        long now = System.currentTimeMillis();
+    public String createRefreshToken(Long userId, long now) {
 
         return Jwts.builder()
                 .setSubject(String.valueOf(userId))
@@ -132,12 +126,8 @@ public class JwtProvider {
      * 반드시 한 가지의 claim만 필요한 경우 사용
      */
 
-    public String getLoginId(String token) {
-        return parseAccessToken(token).getSubject();
-    }
-
     public Long getUserId(String token) {
-        return parseAccessToken(token).get("userId", Long.class);
+        return Long.parseLong(parseAccessToken(token).getSubject());
     }
 
     public String getRole(String token) {
