@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.function.Consumer;
+
 @Getter
 @ToString
 public class Update<T> {
@@ -21,5 +23,11 @@ public class Update<T> {
 
     public static <T> Update<T> absent() {
         return new Update<>(null, false);
+    }
+
+    public void ifPresent(Consumer<T> consumer) {
+        if(present) {
+            consumer.accept(value);
+        }
     }
 }
