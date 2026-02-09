@@ -2,6 +2,7 @@ package com.inspire.inspirebe.user.controller;
 
 import com.inspire.inspirebe.user.dto.UserCreateDTO;
 import com.inspire.inspirebe.user.dto.UserResponseDTO;
+import com.inspire.inspirebe.user.dto.UserUpdateDTO;
 import com.inspire.inspirebe.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -45,9 +46,10 @@ public class UserController {
     }
 
     // Update (수정 - 임시)
-    @PutMapping("/{id}")
-    public ResponseEntity<Void> updateUser() {
-        return null; 
+    @PatchMapping("/{id}")
+    public ResponseEntity<Void> updateUser(@PathVariable("id") Long id, @RequestBody UserUpdateDTO userUpdateDTO) {
+        userService.updateUser(id, userUpdateDTO);
+        return ResponseEntity.noContent().build();
     }
 
     // Delete (삭제)

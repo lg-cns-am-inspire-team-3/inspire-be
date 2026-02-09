@@ -1,11 +1,21 @@
 package com.inspire.inspirebe.auth.controller;
 
 import com.inspire.inspirebe.auth.dto.LogoutRequestDto;
+import com.inspire.inspirebe.auth.dto.UserLoginDTO;
 import com.inspire.inspirebe.auth.service.AuthService;
+import com.inspire.inspirebe.common.cookie.CookieSpec;
+import com.inspire.inspirebe.common.cookie.CookieUtils;
+import com.inspire.inspirebe.common.jwt.JwtProvider;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.micrometer.observation.autoconfigure.ObservationProperties;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,25 +24,36 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthService authService;
-    
+    private final CookieUtils cookieUtils;
+    private final JwtProvider jwtProvider;
+
     @PostMapping("/logout")
-    public ResponseEntity<String> logout(@RequestBody LogoutRequestDto requestDto, HttpServletResponse response) {
+    public ResponseEntity<Void> logout(
+            HttpServletRequest servletRequest,
+            HttpServletResponse servletResponse,
+            @AuthenticationPrincipal Long userId) {
+        /*
+         * access token은 필터에서 처리
+         * 만약 invalid token이면 401 UNAUTHORIZED가 반환된 상태
+         * (편의상) refresh token의 valid와 상관없이 redis에서는 userId에 맞는 값만 지워주면 됨
+         */
 
-        // 1. Redis에서 토큰 삭제
-        authService.logout(requestDto.getEmail());
-
-        // 2. 쿠키 만료 (수명 0초)
-        Cookie cookie = new Cookie("refresh_token", null);
-        cookie.setMaxAge(0);
-        cookie.setPath("/");
-        response.addCookie(cookie);
-
-        return ResponseEntity.ok("로그아웃 성공");
+        authService.logout(servletRequest, servletResponse, userId);
+        return ResponseEntity.noContent().build();
     }
-   
+
     @PostMapping("/login")
-    public String login(@RequestParam String loginId) {
-        
-        return authService.login(loginId);
+    public ResponseEntity<?> login(HttpServletResponse servletResponse, @RequestBody UserLoginDTO userLoginDTO) {
+
+        authService.login(servletResponse, userLoginDTO);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/reissue")
+    public ResponseEntity<?> reissue(HttpServletResponse servletResponse, @CookieValue(name = "refresh_token") String refreshToken) {
+        String accessToken = authService.reissue(servletResponse, refreshToken);
+        return ResponseEntity.noContent()
+                .header("Authorization", "Bearer " + accessToken)
+                .build();
     }
 }

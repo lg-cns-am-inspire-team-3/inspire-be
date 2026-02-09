@@ -21,14 +21,12 @@ public class CookieUtils {
         response.addHeader("Set-Cookie", cookieSpec.toString());
     }
 
-    public void deleteCookie(HttpServletRequest request, HttpServletResponse response, String name, String domain, String path) {
+    public void deleteCookie(HttpServletRequest request, HttpServletResponse response, String name) {
         Optional.ofNullable(request.getCookies())
                 .ifPresent(cookies -> Arrays.stream(cookies)
                         .filter(cookie -> cookie.getName().equals(name))
                         .forEach(cookie -> {
                             cookie.setValue("");
-                            cookie.setDomain(domain);
-                            cookie.setPath(path);
                             cookie.setMaxAge(0);
                             response.addCookie(cookie);
                         }));

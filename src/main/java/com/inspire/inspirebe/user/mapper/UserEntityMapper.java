@@ -17,7 +17,6 @@ public class UserEntityMapper {
     public static UserEntity fromUserCreate(UserCreateDTO userCreateDTO) {
         return UserEntity.builder()
                 .attendances(Collections.emptyList())
-                .loginId(userCreateDTO.getLoginId())
                 .email(userCreateDTO.getEmail())
                 .name(userCreateDTO.getName())
                 .contact(userCreateDTO.getContact())
@@ -29,7 +28,6 @@ public class UserEntityMapper {
     public static UserResponseDTO toResponse(UserEntity userEntity) {
         return UserResponseDTO.builder()
                 .id(userEntity.getId())
-                .loginId(userEntity.getLoginId())
                 .email(userEntity.getEmail())
                 .name(userEntity.getName())
                 .contact(userEntity.getContact())
