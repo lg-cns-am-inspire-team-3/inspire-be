@@ -1,16 +1,18 @@
 package com.inspire.inspirebe.user.service;
 
+import com.inspire.inspirebe.user.dto.UserResponseDTO;
+import com.inspire.inspirebe.user.mapper.UserEntityMapper;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import com.inspire.inspirebe.user.entity.UserEntity;
-import com.inspire.inspirebe.user.entity.enums.UserStatus;
 import com.inspire.inspirebe.user.repository.UserRepository;
-
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,16 +25,20 @@ public class AdminServiceImpl implements AdminService {
     public void approveUser(Long id, Integer salary) {
         // 1. 해당 유저가 있는지 확인
         UserEntity user = userRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
+                .orElseThrow(EntityNotFoundException::new);
 
         // 2. 시급 설정 및 상태 변경 (UserStatus Enum 사용 가정)
-        // UserEntity에 setSalary(), setStatus() 메서드가 있어야 합니다.
-        user.setSalary(salary);
-        user.setStatus(UserStatus.ACTIVE); 
+        user.changeSalary(salary);
+        user.activeUser();
+
     }
 
     @Override
-    public List<UserEntity> getAllUsers() {
-        return userRepository.findAll();
+    @Transactional(readOnly = true)
+    public List<UserResponseDTO> getAllUsers() {
+        return userRepository.findAll()
+                .stream()
+                .map(UserEntityMapper::toResponse)
+                .toList();
     }
 }

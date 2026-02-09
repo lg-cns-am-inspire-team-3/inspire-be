@@ -2,6 +2,7 @@ package com.inspire.inspirebe.user.controller;
 
 import java.util.List;
 
+import com.inspire.inspirebe.user.dto.UserResponseDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -35,7 +36,7 @@ public class AdminController {
 
     // 2. 전체 회원 조회
     @GetMapping
-    public ResponseEntity<List<UserEntity>> getAllUsers() {
+    public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
         return ResponseEntity.ok(adminService.getAllUsers());
     }
 }
