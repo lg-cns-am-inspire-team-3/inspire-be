@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthService authService;
-
+    
     @PostMapping("/logout")
     public ResponseEntity<String> logout(@RequestBody LogoutRequestDto requestDto, HttpServletResponse response) {
-        
+
         // 1. Redis에서 토큰 삭제
         authService.logout(requestDto.getEmail());
 
@@ -28,5 +28,11 @@ public class AuthController {
         response.addCookie(cookie);
 
         return ResponseEntity.ok("로그아웃 성공");
+    }
+   
+    @PostMapping("/login")
+    public String login(@RequestParam String loginId) {
+        
+        return authService.login(loginId);
     }
 }
