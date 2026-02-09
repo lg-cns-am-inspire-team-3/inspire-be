@@ -15,10 +15,13 @@ public class LocalCredentials extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false, unique = true)
-    private UserEntity user;
+    @Column(name = "user_id", nullable = false, updatable = false)
+    private Long userId;
 
     @Column(name = "password_hash", nullable = false)
     private String passwordHash;
+
+    public void changePasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
 }
