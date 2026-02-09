@@ -2,14 +2,11 @@ package com.inspire.inspirebe.user.controller;
 
 import com.inspire.inspirebe.user.dto.UserCreateDTO;
 import com.inspire.inspirebe.user.dto.UserResponseDTO;
-import com.inspire.inspirebe.user.dto.UserSignupRequest;
 import com.inspire.inspirebe.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -39,15 +36,6 @@ public class UserController {
     }
 
     // --- 조장님이 추가하신 CRUD API ---
-
-    // Create (관리자용 혹은 직접 생성용)
-    @PostMapping
-    public ResponseEntity<UserResponseDTO> createUser(@RequestBody UserCreateDTO request) {
-        UserResponseDTO response = userService.createUser(request);
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(response);
-    }
 
     // Read (단건 조회)
     @GetMapping("/{id}")

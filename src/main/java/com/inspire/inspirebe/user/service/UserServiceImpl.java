@@ -53,13 +53,6 @@ public class UserServiceImpl implements UserService {
 
     // --- 조장님이 추가하신 CRUD 기능들 (껍데기 유지) ---
 
-    // Create
-    @Override
-    @Transactional
-    public UserResponseDTO createUser(UserCreateDTO userCreateDTO) {
-        return null;
-    }
-
     // Read
     @Override
     @Transactional(readOnly = true)
@@ -82,7 +75,6 @@ public class UserServiceImpl implements UserService {
                     .orElseThrow(EntityNotFoundException::new);
             localCredentials.changePasswordHash(passwordEncoder.encode(password));
         });
-
         userUpdateDTO.getName().ifPresent(userEntity::changeName);
         userUpdateDTO.getEmail().ifPresent(userEntity::changeEmail);
         userUpdateDTO.getContact().ifPresent(userEntity::changeContact);

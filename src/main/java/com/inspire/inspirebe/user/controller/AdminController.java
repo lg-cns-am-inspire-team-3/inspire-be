@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.inspire.inspirebe.user.dto.UserApprovalRequest;
-import com.inspire.inspirebe.user.entity.UserEntity;
 import com.inspire.inspirebe.user.service.AdminService;
 
 import lombok.RequiredArgsConstructor;
