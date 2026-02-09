@@ -20,7 +20,8 @@ public class JwtProvider {
     private final long accessExpiration; // milliseconds
     private final long refreshExpiration; // milliseconds
 
-    private Key key;
+    private Key accessKey;
+    private Key refreshKey;
 
     public JwtProvider(@Value("jwt.access.secret") String accessSecret,
                        @Value("jwt.refresh.secret") String refreshSecret,
@@ -34,29 +35,34 @@ public class JwtProvider {
 
     @PostConstruct
     protected void init() {
-        this.key = Keys.hmacShaKeyFor(accessSecret.getBytes(StandardCharsets.UTF_8));
+        this.accessKey = Keys.hmacShaKeyFor(accessSecret.getBytes(StandardCharsets.UTF_8));
+        this.refreshKey = Keys.hmacShaKeyFor(refreshSecret.getBytes(StandardCharsets.UTF_8));
     }
 
-    public String createAccessToken(String loginId, UserRole role, long currentTimeMillis) {
+    public String createAccessToken(String loginId, UserRole role) {
         Claims claims = Jwts.claims().setSubject(loginId);
         claims.put("role", role.name());
 
+        long now = System.currentTimeMillis();
+
         return Jwts.builder()
                 .setClaims(claims)
-                .setIssuedAt(new Date(currentTimeMillis))
-                .setExpiration(new Date(currentTimeMillis + accessExpiration))
-                .signWith(key, SignatureAlgorithm.HS256)
+                .setIssuedAt(new Date(now))
+                .setExpiration(new Date(now + accessExpiration))
+                .signWith(accessKey, SignatureAlgorithm.HS256)
                 .compact();
     }
 
 
-    public String createRefreshToken(String loginId, long currentTimeMillis) {
+    public String createRefreshToken(String loginId) {
+
+        long now = System.currentTimeMillis();
 
         return Jwts.builder()
                 .setSubject(loginId)
-                .setIssuedAt(new Date(currentTimeMillis))
-                .setExpiration(new Date(currentTimeMillis + refreshExpiration))
-                .signWith(key, SignatureAlgorithm.HS256)
+                .setIssuedAt(new Date(now))
+                .setExpiration(new Date(now + refreshExpiration))
+                .signWith(refreshKey, SignatureAlgorithm.HS256)
                 .compact();
     }
 }

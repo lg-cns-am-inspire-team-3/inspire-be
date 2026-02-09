@@ -3,10 +3,12 @@ package com.inspire.inspirebe.common.cookie;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.Optional;
 
+@Component
 public class CookieUtils {
     public Optional<Cookie> getCookie(HttpServletRequest request, String name) {
         return Optional.ofNullable(request.getCookies())
