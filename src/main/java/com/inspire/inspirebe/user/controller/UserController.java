@@ -22,8 +22,8 @@ public class UserController {
      * [POST] /api/v1/users/signup
      * 일반 회원가입
      */
-    @PostMapping("/signup")
-    public ResponseEntity<String> signup(@RequestBody UserSignupRequest request) {
+    @PostMapping("")
+    public ResponseEntity<String> signup(@RequestBody UserCreateDTO request) {
         userService.signup(request);
         return ResponseEntity.ok("회원가입이 성공적으로 완료되었습니다.");
     }

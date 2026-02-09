@@ -13,7 +13,7 @@ public interface UserService {
     /**
      * 회원가입을 처리하는 메서드입니다.
      */
-    void signup(UserSignupRequest request);
+    void signup(UserCreateDTO request);
 
     /**
      * 아이디가 이미 존재하는지 확인하는 메서드입니다.

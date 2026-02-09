@@ -27,9 +27,12 @@ public class Attend extends BaseEntity {
     @Column(name = "work_date")
     private LocalDate workDate;
 
-    @Column(name = "check_in_time")
-    private LocalDateTime checkInTime;
+    @Column(name = "check_in")
+    private LocalDateTime checkIn;
 
-    @Column(name = "check_out_time")
-    private LocalDateTime checkOutTime;
+    @Column(name = "check_out")
+    private LocalDateTime checkOut;
+
+    @Column(name = "total_time")
+    private LocalDateTime totalTime;
 }
