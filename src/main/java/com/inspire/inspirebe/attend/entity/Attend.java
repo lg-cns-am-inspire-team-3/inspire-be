@@ -21,7 +21,7 @@ public class Attend extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false, updatable = false)
     private UserEntity user;
 
     @Column(name = "work_date")
