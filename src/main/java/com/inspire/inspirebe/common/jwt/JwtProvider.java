@@ -2,10 +2,12 @@ package com.inspire.inspirebe.common.jwt;
 
 import com.inspire.inspirebe.user.entity.enums.UserRole;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +15,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 
+@Slf4j
 @Component
 public class JwtProvider {
     private final String accessSecret;
@@ -31,6 +34,10 @@ public class JwtProvider {
         this.refreshSecret = refreshSecret;
         this.accessExpiration = accessExpiration;
         this.refreshExpiration = refreshExpiration;
+        log.info("access secret: {}", this.accessSecret);
+        log.info("refresh secret: {}", this.refreshSecret);
+        log.info("access expires: {}", this.accessExpiration);
+        log.info("refresh secret: {}", this.refreshExpiration);
     }
 
     @PostConstruct
@@ -39,8 +46,16 @@ public class JwtProvider {
         this.refreshKey = Keys.hmacShaKeyFor(refreshSecret.getBytes(StandardCharsets.UTF_8));
     }
 
-    public String createAccessToken(String loginId, UserRole role) {
+    /*
+     * access token 생성
+     * sub: loginId
+     * userId: PK
+     * role: USER 또는 ADMIN
+     */
+
+    public String createAccessToken(String loginId, String userId, UserRole role) {
         Claims claims = Jwts.claims().setSubject(loginId);
+        claims.put("userId", userId);
         claims.put("role", role.name());
 
         long now = System.currentTimeMillis();
@@ -53,16 +68,79 @@ public class JwtProvider {
                 .compact();
     }
 
+    /*
+     * refresh token 생성
+     * sub: PK (access token과 목적을 달리함)
+     */
 
-    public String createRefreshToken(String loginId) {
+    public String createRefreshToken(String userId) {
 
         long now = System.currentTimeMillis();
 
         return Jwts.builder()
-                .setSubject(loginId)
+                .setSubject(String.valueOf(userId))
                 .setIssuedAt(new Date(now))
                 .setExpiration(new Date(now + refreshExpiration))
                 .signWith(refreshKey, SignatureAlgorithm.HS256)
                 .compact();
+    }
+
+    /*
+     * access token 및 refresh token 파서
+     */
+
+    public Claims parseAccessToken(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(accessKey)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
+    public Claims parseRefreshToken(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(refreshKey)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
+    /*
+     * access token 및 refresh token 검증
+     */
+
+    public boolean validateAccessToken(String token) {
+        try {
+            parseAccessToken(token);
+            return true;
+        } catch (JwtException | IllegalArgumentException e) {
+            return false;
+        }
+    }
+
+    public boolean validateRefreshToken(String token) {
+        try {
+            parseRefreshToken(token);
+            return true;
+        } catch (JwtException | IllegalArgumentException e) {
+            return false;
+        }
+    }
+
+    /*
+     * claim 중 필요한 요소만 가져오기
+     * 반드시 한 가지의 claim만 필요한 경우 사용
+     */
+
+    public String getLoginId(String token) {
+        return parseAccessToken(token).getSubject();
+    }
+
+    public Long getUserId(String token) {
+        return parseAccessToken(token).get("userId", Long.class);
+    }
+
+    public String getRole(String token) {
+        return parseAccessToken(token).get("role", String.class);
     }
 }
