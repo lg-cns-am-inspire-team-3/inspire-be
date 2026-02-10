@@ -13,6 +13,7 @@ import java.util.List;
 @Table(name = "users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Setter
 @ToString(exclude = "attendances")
 public class UserEntity extends BaseEntity {
     @Id

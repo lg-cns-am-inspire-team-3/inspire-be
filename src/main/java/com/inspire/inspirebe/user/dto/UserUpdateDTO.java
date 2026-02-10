@@ -12,4 +12,6 @@ public class UserUpdateDTO {
     private Update<String> name = Update.absent();
     private Update<String> contact = Update.absent();
     private Update<String> email = Update.absent();
+    private Update<String> address = Update.absent(); // 주소 추가
+    private Update<Integer> salary = Update.absent(); // 시급 추가
 }

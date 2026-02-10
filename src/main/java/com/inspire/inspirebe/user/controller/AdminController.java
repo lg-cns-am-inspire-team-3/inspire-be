@@ -3,6 +3,8 @@ package com.inspire.inspirebe.user.controller;
 import java.util.List;
 
 import com.inspire.inspirebe.user.dto.UserResponseDTO;
+import com.inspire.inspirebe.user.dto.UserUpdateDTO;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,10 +56,10 @@ public class AdminController {
      * GET /api/v1/admin/users/{id}
      * 설명: 목록에서 특정 근무자를 클릭했을 때 상세 페이지 데이터를 제공합니다.
      */
-    // @GetMapping("/{id}")
-    // public ResponseEntity<UserResponseDTO> getUserDetail(@PathVariable Long id) {
-    // return ResponseEntity.ok(adminService.getUserDetail(id));
-    // }
+    @GetMapping("/{id}")
+    public ResponseEntity<UserResponseDTO> getUserDetail(@PathVariable Long id) {
+    return ResponseEntity.ok(adminService.getUserDetail(id));
+    }
 
     /**
      * 5. 근무자 삭제
@@ -67,4 +69,19 @@ public class AdminController {
         adminService.deleteUser(id);
         return ResponseEntity.ok("근무자가 삭제되었습니다.");
     }
+
+    /**
+     * 6. 근무자 정보 수정 (이름, 연락처, 시급 등)
+     * PUT /api/v1/admin/users/{id}
+     */
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateUser(
+            @PathVariable Long id,
+            @RequestBody UserUpdateDTO request) {
+        
+        adminService.updateUser(id, request);
+        return ResponseEntity.ok("근무자 정보가 성공적으로 수정되었습니다.");
+    }
+
+
 }
