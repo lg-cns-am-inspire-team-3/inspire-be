@@ -41,4 +41,13 @@ public class AdminServiceImpl implements AdminService {
                 .map(UserEntityMapper::toResponse)
                 .toList();
     }
+
+    @Override
+    @Transactional
+    public void deleteUser(Long id) {
+        UserEntity user = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("해당 사용자를 찾을 수 없습니다."));
+        
+        userRepository.delete(user);
+    }
 }
