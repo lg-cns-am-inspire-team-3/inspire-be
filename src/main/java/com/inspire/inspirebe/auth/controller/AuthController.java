@@ -33,12 +33,7 @@ public class AuthController {
             HttpServletRequest servletRequest,
             HttpServletResponse servletResponse,
             @CookieValue(name = "refresh_token", required = false) String refreshToken) {
-        /*
-         * access token은 필터에서 처리
-         * 만약 invalid token이면 401 UNAUTHORIZED가 반환된 상태
-         * (편의상) refresh token의 valid와 상관없이 redis에서는 userId에 맞는 값만 지워주면 됨
-         */
-
+    
         authService.logout(servletRequest, servletResponse, refreshToken);
         return ResponseEntity.noContent().build();
     }
