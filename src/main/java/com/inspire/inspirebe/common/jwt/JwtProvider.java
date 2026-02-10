@@ -25,10 +25,10 @@ public class JwtProvider {
     private Key accessKey;
     private Key refreshKey;
 
-    public JwtProvider(@Value("jwt.access.secret") String accessSecret,
-                       @Value("jwt.refresh.secret") String refreshSecret,
-                       @Value("jwt.access.expires") long accessExpiration,
-                       @Value("jwt.refresh.expires") long refreshExpiration) {
+    public JwtProvider(@Value("${jwt.access.secret}") String accessSecret,
+                       @Value("${jwt.refresh.secret}") String refreshSecret,
+                       @Value("${jwt.access.expires}") long accessExpiration,
+                       @Value("${jwt.refresh.expires}") long refreshExpiration) {
         this.accessSecret = accessSecret;
         this.refreshSecret = refreshSecret;
         this.accessExpiration = accessExpiration;
@@ -130,7 +130,15 @@ public class JwtProvider {
         return Long.parseLong(parseAccessToken(token).getSubject());
     }
 
+    public Long getUserIdFromRefresh(String token) {
+        return Long.parseLong(parseRefreshToken(token).getSubject());
+    }
+
     public String getRole(String token) {
         return parseAccessToken(token).get("role", String.class);
+    }
+
+    public Long getTokenExpiresInSeconds() {
+        return this.accessExpiration / 1000;
     }
 }

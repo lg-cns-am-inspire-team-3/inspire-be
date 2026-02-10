@@ -1,5 +1,6 @@
 package com.inspire.inspirebe.auth.service;
 
+import com.inspire.inspirebe.auth.dto.TokenResponseDTO;
 import com.inspire.inspirebe.auth.dto.UserLoginDTO;
 import com.inspire.inspirebe.common.jwt.JwtProvider;
 import com.inspire.inspirebe.user.service.UserService;
@@ -30,13 +31,14 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void logout(HttpServletRequest servletRequest, HttpServletResponse servletResponse, Long userId) {
+    public void logout(HttpServletRequest servletRequest, HttpServletResponse servletResponse, String refreshToken) {
+        Long userId = jwtProvider.getUserIdFromRefresh(refreshToken);
         jwtTokenService.deleteRefreshToken(userId);
         jwtTokenService.clearRefreshTokenCookie(servletRequest, servletResponse);
     }
 
     @Override
-    public String reissue(HttpServletResponse servletResponse, String fromToken) {
+    public TokenResponseDTO reissue(HttpServletResponse servletResponse, String fromToken) {
         // jwt 자체 검증
         if (!jwtProvider.validateRefreshToken(fromToken)) {
             throw new RuntimeException("유효하지 않은 token입니다.");
@@ -44,7 +46,7 @@ public class AuthServiceImpl implements AuthService {
 
         // refresh token은 있는데, redis랑 다른 경우
         // e.g.) DB에서 의도적으로 삭제
-        Long userId = jwtProvider.getUserId(fromToken);
+        Long userId = jwtProvider.getUserIdFromRefresh(fromToken);
         if(!jwtTokenService.validateRefreshToken(userId, fromToken)) {
             throw new RuntimeException("유효하지 않은 token입니다.");
         }
@@ -61,7 +63,10 @@ public class AuthServiceImpl implements AuthService {
         jwtTokenService.storeRefreshToken(userId, refreshToken);
         jwtTokenService.addRefreshTokenCookie(servletResponse, refreshToken);
 
-        return accessToken;
+        return TokenResponseDTO.builder()
+                .token(accessToken)
+                .expires(jwtProvider.getTokenExpiresInSeconds())
+                .build();
     }
 
 }

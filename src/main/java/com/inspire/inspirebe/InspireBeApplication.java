@@ -8,7 +8,7 @@ import org.springframework.boot.data.redis.autoconfigure.DataRedisRepositoriesAu
 
 @SpringBootApplication
 @ConfigurationPropertiesScan
-public class InspireBeApplication {
+public class  InspireBeApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(InspireBeApplication.class, args);

@@ -1,6 +1,7 @@
 package com.inspire.inspirebe.auth.controller;
 
 import com.inspire.inspirebe.auth.dto.LogoutRequestDto;
+import com.inspire.inspirebe.auth.dto.TokenResponseDTO;
 import com.inspire.inspirebe.auth.dto.UserLoginDTO;
 import com.inspire.inspirebe.auth.service.AuthService;
 import com.inspire.inspirebe.common.cookie.CookieSpec;
@@ -31,14 +32,14 @@ public class AuthController {
     public ResponseEntity<Void> logout(
             HttpServletRequest servletRequest,
             HttpServletResponse servletResponse,
-            @AuthenticationPrincipal Long userId) {
+            @CookieValue(name = "refresh_token", required = false) String refreshToken) {
         /*
          * access token은 필터에서 처리
          * 만약 invalid token이면 401 UNAUTHORIZED가 반환된 상태
          * (편의상) refresh token의 valid와 상관없이 redis에서는 userId에 맞는 값만 지워주면 됨
          */
 
-        authService.logout(servletRequest, servletResponse, userId);
+        authService.logout(servletRequest, servletResponse, refreshToken);
         return ResponseEntity.noContent().build();
     }
 
@@ -50,10 +51,9 @@ public class AuthController {
     }
 
     @PostMapping("/reissue")
-    public ResponseEntity<?> reissue(HttpServletResponse servletResponse, @CookieValue(name = "refresh_token") String refreshToken) {
-        String accessToken = authService.reissue(servletResponse, refreshToken);
-        return ResponseEntity.noContent()
-                .header("Authorization", "Bearer " + accessToken)
-                .build();
+    public ResponseEntity<TokenResponseDTO> reissue(HttpServletResponse servletResponse, @CookieValue(name = "refresh_token") String refreshToken) {
+        TokenResponseDTO accessToken = authService.reissue(servletResponse, refreshToken);
+
+        return ResponseEntity.ok(accessToken);
     }
 }
