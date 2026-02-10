@@ -5,15 +5,23 @@ import com.inspire.inspirebe.user.entity.enums.UserRole;
 import com.inspire.inspirebe.user.entity.enums.UserStatus;
 import com.inspire.inspirebe.user.repository.UserCredentialsRepository;
 import com.inspire.inspirebe.user.repository.UserRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.Collections;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
@@ -33,11 +41,11 @@ public class UserApiTest {
         userRepository.deleteAll();
 
         UserEntity user1 = UserEntity.builder()
-                .id(1L)
                 .name("wooseong")
                 .email("rymph0501@gmail.com")
                 .role(UserRole.USER)
                 .contact("010-1234-5678")
+                .address("Seoul")
                 .attendances(Collections.emptyList())
                 .status(UserStatus.SUSPENDED)
                 .build();
@@ -46,8 +54,18 @@ public class UserApiTest {
     }
 
     @Test
-    void checkIdTest() {
+    void checkIdTest() throws Exception {
+        // when
+        mockMvc.perform(get("/api/v1/users/check-id/{id}", 1L))
+                .andExpect(status().isOk())
+                .andExpect(content().string("false"));
 
+        // then
+        UserEntity user = userRepository.findById(1L).orElse(null);
+        Assertions.assertNotNull(user);
+
+
+        System.out.format("User Entity : %s\n", user.toString());
     }
 
     @Test
@@ -61,8 +79,51 @@ public class UserApiTest {
     }
 
     @Test
-    void updateUserTest() {
+    void updateUserTest() throws Exception {
+        // name, contact, email
+        // given
+        StringBuilder sb = new StringBuilder();
+        String[] jsons = {
+                "{\"name\":\"name1\"}",
+                "{\"contact\":\"contact2\"}",
+                "{\"email\":\"email3\"}",
+                "{\"name\":\"name4\", \"contact\":\"null\"}",
+                "{\"name\":\"name5\", \"email\":\"email5\"}",
+                "{\"contact\":\"null\", \"email\":\"email6\"}",
+                "{\"name\":\"name7\", \"contact\":\"content7\", \"email\":\"email7\"}",
+                "{\"name\":\"name8\", \"contact\":\"null\", \"email\":\"email8\"}",
+                "{}",
+        };
 
+        // when
+        UserEntity user = userRepository.findById(1L).orElse(null);
+        Assertions.assertNotNull(user);
+        sb.append("initial value").append("\n").append(user).append("\n");
+        // name: wooseong, contact: 010-1234-5678, email: rymph0501@gmail.com
+
+        for(String json : jsons) {
+            mockMvc.perform(patch("/api/v1/users/{id}", 1L)
+                    .contentType("application/json")
+                    .content(json))
+                    .andExpect(status().isNoContent());
+
+            user = userRepository.findById(1L).orElse(null);
+            Assertions.assertNotNull(user);
+            // then
+            sb.append(String.format("name: %s, contact: %s, email: %s\n", user.getName(), user.getContact(), user.getEmail()));
+            // console output
+            // name: name1, contact: 010-1234-5678, email: rymph0501@gmail.com
+            // name: name1, contact: contact2, email: rymph0501@gmail.com
+            // name: name1, contact: contact2, email: email3
+            // name: name4, contact: null, email: email3
+            // name: name5, contact: null, email: email5
+            // name: name5, contact: null, email: email6
+            // name: name7, contact: content7, email: email7
+            // name: name8, contact: null, email: email8
+            // name: name8, contact: null, email: email8
+        }
+
+        System.out.println(sb);
     }
 
     @Test
