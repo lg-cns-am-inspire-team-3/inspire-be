@@ -55,7 +55,6 @@ public class AdminApiTest {
                 .role(UserRole.USER)
                 .contact("010-1234-5678")
                 .address("Seoul")
-                .attendances(Collections.emptyList())
                 .status(UserStatus.SUSPENDED)
                 .build();
 
@@ -65,7 +64,6 @@ public class AdminApiTest {
                 .role(UserRole.ADMIN)
                 .contact("010-4321-8765")
                 .address("Seoul")
-                .attendances(Collections.emptyList())
                 .status(UserStatus.ACTIVE)
                 .build();
 
@@ -75,7 +73,6 @@ public class AdminApiTest {
                 .role(UserRole.USER)
                 .contact("010-5678-1234")
                 .address("Seoul")
-                .attendances(Collections.emptyList())
                 .status(UserStatus.SUSPENDED)
                 .build();
 

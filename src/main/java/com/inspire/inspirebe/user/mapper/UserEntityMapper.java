@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 public class UserEntityMapper {
     public static UserEntity fromUserCreate(UserCreateDTO userCreateDTO) {
         return UserEntity.builder()
-                .attendances(Collections.emptyList())
                 .email(userCreateDTO.getEmail())
                 .name(userCreateDTO.getName())
                 .contact(userCreateDTO.getContact())
@@ -32,9 +31,6 @@ public class UserEntityMapper {
                 .name(userEntity.getName())
                 .contact(userEntity.getContact())
                 .address(userEntity.getAddress())
-                .attendances(userEntity.getAttendances().stream()
-                        .map(AttendanceDTO::from)
-                        .toList())
                 .build();
     }
 }

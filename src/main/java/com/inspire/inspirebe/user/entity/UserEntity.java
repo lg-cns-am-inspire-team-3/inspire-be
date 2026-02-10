@@ -13,14 +13,10 @@ import java.util.List;
 @Table(name = "users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@ToString(exclude = "attendances")
 public class UserEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private List<Attend> attendances;
 
     @Column(name = "email", nullable = false)
     private String email;
@@ -47,9 +43,8 @@ public class UserEntity extends BaseEntity {
 
 
     @Builder
-    public UserEntity(Long id, List<Attend> attendances, String email, String name, String contact, String address, UserRole role, UserStatus status, Integer salary) {
+    public UserEntity(Long id, String email, String name, String contact, String address, UserRole role, UserStatus status, Integer salary) {
         this.id = id;
-        this.attendances = attendances;
         this.email = email;
         this.name = name;
         this.contact = contact;
