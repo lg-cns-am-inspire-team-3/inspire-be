@@ -1,6 +1,6 @@
 package com.inspire.inspirebe.auth.controller;
 
-import com.inspire.inspirebe.auth.dto.LogoutRequestDto;
+// import com.inspire.inspirebe.auth.dto.LogoutRequestDto;
 import com.inspire.inspirebe.auth.dto.TokenResponseDTO;
 import com.inspire.inspirebe.auth.dto.UserLoginDTO;
 import com.inspire.inspirebe.auth.service.AuthService;
@@ -11,7 +11,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.micrometer.observation.autoconfigure.ObservationProperties;
+// import org.springframework.boot.micrometer.observation.autoconfigure.ObservationProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;

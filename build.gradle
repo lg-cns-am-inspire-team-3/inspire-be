@@ -1,12 +1,11 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '4.0.2'
-    id 'io.spring.dependency-management' version '1.1.7'
+    id 'org.springframework.boot' version '3.2.2'
+    id 'io.spring.dependency-management' version '1.1.4'
 }
 
 group = 'com.inspire'
 version = '0.0.1-SNAPSHOT'
-description = 'inspire-be'
 
 java {
     toolchain {
@@ -19,42 +18,44 @@ repositories {
 }
 
 dependencies {
-
-    // Lombok
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
-    testCompileOnly 'org.projectlombok:lombok'
-    testAnnotationProcessor 'org.projectlombok:lombok'
-
-    // Spring Configuration
-    implementation 'org.springframework.boot:spring-boot-configuration-processor'
-
-    // Spring Actuator
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
-
-    // Spring Web MVC
-    implementation 'org.springframework.boot:spring-boot-starter-webmvc'
+    // 1. 웹
+    implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-    // Spring Security
+    // 2. 보안 & OAuth
     implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.boot:spring-boot-starter-security-oauth2-client'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
-    // Spring DB-related libraries
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    // 3. 데이터베이스
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
-    implementation 'org.springframework.boot:spring-boot-h2console'
     runtimeOnly 'com.h2database:h2'
 
-    // Testing Libraries
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.security:spring-security-test'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-
+    // 4. JWT
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+    // 5. JSON 처리
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+    implementation 'com.fasterxml.jackson.core:jackson-core'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations'
+
+    // 6. 기타 도구 (롬복 설정 - 여기가 핵심 수정됨!)
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    
+    // 👇 [추가됨] 테스트 코드에서도 롬복(Getter, Setter)을 쓰기 위한 필수 설정
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-configuration-processor'
+
+    // 7. 테스트
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
 }
 
 tasks.named('test') {
