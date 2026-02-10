@@ -1,20 +1,22 @@
 package com.inspire.inspirebe.common.jwt;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
+@Component
 @ConfigurationProperties(prefix = "jwt")
-@RequiredArgsConstructor
 @Getter
+@Setter  // 생성자 대신 Setter를 통해 값을 주입받도록 변경
 public class JwtProperties {
-    private final KeyProperties access;
-    private final KeyProperties refresh;
+    private KeyProperties access = new KeyProperties();
+    private KeyProperties refresh = new KeyProperties();
 
-    @RequiredArgsConstructor
     @Getter
+    @Setter
     public static class KeyProperties {
-        private final String secret;
-        private final int expires;
+        private String secret;
+        private long expires;
     }
 }

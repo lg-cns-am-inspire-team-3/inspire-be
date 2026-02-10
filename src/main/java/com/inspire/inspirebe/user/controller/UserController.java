@@ -17,7 +17,7 @@ public class UserController {
     private final UserService userService;
 
     /**
-     * [POST] /api/v1/users/signup
+     * [POST] /api/v1/users
      * 일반 회원가입
      */
     @PostMapping("")

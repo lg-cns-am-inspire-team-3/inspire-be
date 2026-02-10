@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UserUpdateDTO {
-    private Update<String> name;
-    private Update<String> contact;
-    private Update<String> email;
+    private Update<String> name = Update.absent();
+    private Update<String> contact = Update.absent();
+    private Update<String> email = Update.absent();
 }

@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public UserResponseDTO getUser(Long id) {
-        UserEntity userEntity = userRepository.findByIdWithAttendances(id)
+        UserEntity userEntity = userRepository.findById(id)
                 .orElseThrow(EntityNotFoundException::new);
 
         return UserEntityMapper.toResponse(userEntity);
