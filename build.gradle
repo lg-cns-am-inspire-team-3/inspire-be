@@ -42,11 +42,11 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-core'
     implementation 'com.fasterxml.jackson.core:jackson-annotations'
 
-    // 6. 기타 도구 (롬복 설정)
+    // 6. 기타 도구 (롬복 설정 - 중복 없이 하나로 합침)
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     
-    // 테스트 코드에서도 롬복(Getter, Setter)을 쓰기 위한 필수 설정
+    // 연진님이 추가하신 테스트용 롬복
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
 
@@ -57,7 +57,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     
-    // 👇 [핵심 추가] VS Code 테스트 실행 에러(OutputDirectoryCreator) 해결용
+    // 소정님 & 연진님이 모두 필요로 했던 JUnit 런처 (한 줄만 딱!)
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
