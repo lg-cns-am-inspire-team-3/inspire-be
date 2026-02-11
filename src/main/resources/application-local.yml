@@ -35,3 +35,6 @@ management:
   health:
     redis:
       enabled: false
+
+server:
+  port: 8080
