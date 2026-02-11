@@ -74,6 +74,10 @@ public class UserEntity extends BaseEntity {
         this.address = address;
     }
 
+    public void changeUserStatus(String status) {
+        this.status = UserStatus.valueOf(status);
+    }
+
     public void activateUser() {
         this.status = UserStatus.ACTIVE;
     }

@@ -1,29 +1,38 @@
 package com.inspire.inspirebe.user.service;
 
+import com.inspire.inspirebe.user.dto.AdminUserUpdateDTO;
 import com.inspire.inspirebe.user.entity.UserEntity;
 import com.inspire.inspirebe.user.dto.UserCreateDTO;
 import com.inspire.inspirebe.user.dto.UserResponseDTO;
 import com.inspire.inspirebe.user.dto.UserUpdateDTO;
 import com.inspire.inspirebe.user.entity.UserCredentials;
+import com.inspire.inspirebe.user.entity.enums.UserStatus;
 import com.inspire.inspirebe.user.mapper.UserEntityMapper;
 import com.inspire.inspirebe.user.repository.UserCredentialsRepository;
 import com.inspire.inspirebe.user.repository.UserRepository;
+import com.inspire.inspirebe.user.specification.UserSpecification;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    // 1. 모든 의존성 주입을 클래스 최상단으로 모았습니다.
+    // Dependency Injection
     private final UserRepository userRepository;
     private final UserCredentialsRepository credentialsRepository;
     private final PasswordEncoder passwordEncoder;
 
-    // --- 회원가입 기능 ---
+    /**
+     * 1. 회원가입 요청
+     */
     @Override
     @Transactional
     public void signup(UserCreateDTO request) {
@@ -46,24 +55,72 @@ public class UserServiceImpl implements UserService {
         credentialsRepository.save(credentials);
     }
 
+    /**
+     * 2. 회원 중복 확인
+     */
     @Override
     @Transactional(readOnly = true)
     public boolean isIdDuplicated(String loginId) {
         return credentialsRepository.existsByLoginId(loginId);
     }
 
-    // --- 조장님이 추가하신 CRUD 기능들 (껍데기 유지) ---
+    /**
+     * 3. 모든 유저 조회
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List<UserResponseDTO> getAllUsers(String statusStr) {
+        UserStatus status = statusStr != null ? UserStatus.valueOf(statusStr) : null;
 
-    // Read
+        Specification<UserEntity> spec = Specification
+                .where(UserSpecification.hasStatus(status));
+
+        return userRepository.findAll(spec)
+                .stream()
+                .map(UserEntityMapper::toResponse)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 4. 특정 유저 조회
+     */
     @Override
     @Transactional(readOnly = true)
     public UserResponseDTO getUser(Long id) {
-        UserEntity userEntity = userRepository.findById(id)
-                .orElseThrow(EntityNotFoundException::new);
+        UserEntity user = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("ID: " + id + " 근무자를 찾을 수 없습니다."));
 
-        return UserEntityMapper.toResponse(userEntity);
+        return UserEntityMapper.toResponse(user);
     }
 
+    /**
+     * 5. 승인 대기 유저 조회
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List<UserResponseDTO> getSuspendedUsers() {
+        return userRepository.findByStatus(UserStatus.SUSPENDED)
+                .stream()
+                .map(UserEntityMapper::toResponse)
+                .toList();
+    }
+
+
+    /**
+     * 6. 특정 유저 삭제
+     */
+    @Override
+    @Transactional
+    public void deleteUser(Long id) {
+        UserEntity user = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("ID: " + id + " 사용자를 찾을 수 없습니다."));
+        userRepository.delete(user);
+    }
+
+    /**
+     * 7. 유저 Role 조회
+     *    근데, 쓸 일 없음... 테스트 코드에서 잠깐 썼음.
+     */
     @Override
     @Transactional(readOnly = true)
     public String getUserRole(Long id) {
@@ -74,17 +131,45 @@ public class UserServiceImpl implements UserService {
     }
 
     // Updates
+    /**
+     * 8. 공통 업데이트 메소드
+     */
+    public void applyCommonUpdate(UserEntity userEntity, UserUpdateDTO userUpdateDTO) {
+        userUpdateDTO.getName().ifPresent(userEntity::changeName);
+        userUpdateDTO.getEmail().ifPresent(userEntity::changeEmail);
+        userUpdateDTO.getContact().ifPresent(userEntity::changeContact);
+        userUpdateDTO.getAddress().ifPresent(userEntity::changeEmail);
+    }
+    /**
+     * 9. 특정 유저 업데이트 (유저용)
+     */
     @Override
     @Transactional
     public void updateUser(Long id, UserUpdateDTO userUpdateDTO) {
         UserEntity userEntity = userRepository.findById(id)
                         .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 유저입니다."));
 
-        userUpdateDTO.getName().ifPresent(userEntity::changeName);
-        userUpdateDTO.getEmail().ifPresent(userEntity::changeEmail);
-        userUpdateDTO.getContact().ifPresent(userEntity::changeContact);
+        applyCommonUpdate(userEntity, userUpdateDTO);
     }
 
+    /**
+     * 10. 특정 유저 업데이트 (관리자용)
+     */
+    @Override
+    @Transactional
+    public void updateUserByAdmin(Long id, AdminUserUpdateDTO userUpdateDTO) {
+        UserEntity userEntity = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 유저입니다."));
+
+        applyCommonUpdate(userEntity, userUpdateDTO);
+        userUpdateDTO.getSalary().ifPresent(userEntity::changeSalary);
+        userUpdateDTO.getStatus().ifPresent(userEntity::changeUserStatus);
+    }
+
+    /**
+     * 11. 유저 비밀번호 수정
+     *    아직 구현 안함
+     */
     @Override
     @Transactional
     public void updatePassword(Long id, String oldPassword, String newPassword) {
@@ -99,19 +184,8 @@ public class UserServiceImpl implements UserService {
         credentials.changePasswordHash(passwordEncoder.encode(newPassword));
     }
 
-    // Delete
-    @Override
-    @Transactional
-    public void deleteUser(Long id) {
-        UserEntity userEntity = userRepository.findById(id)
-                .orElseThrow(EntityNotFoundException::new);
-
-        userRepository.delete(userEntity);
-    }
-
-    /*
-     *
-     *
+    /**
+     * 12. 비밀번호 검증
      */
     @Override
     @Transactional(readOnly = true)
