@@ -35,4 +35,17 @@ public class Attend extends BaseEntity {
 
     @Column(name = "total_time")
     private LocalDateTime totalTime;
+
+    public Attend(UserEntity user) {
+        this.user = user;
+        this.workDate = LocalDate.now();
+        this.checkIn = LocalDateTime.now();
+    }
+
+    public void updateCheckOut(LocalDateTime checkOut) {
+        this.checkOut = checkOut;
+    }
+
+    
+
 }
