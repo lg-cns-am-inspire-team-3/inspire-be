@@ -1,9 +1,13 @@
 package com.inspire.inspirebe.user.service;
 
 // 1. 모든 import 문은 파일 최상단에 모아야 합니다.
+import com.inspire.inspirebe.user.dto.AdminUserUpdateDTO;
 import com.inspire.inspirebe.user.dto.UserCreateDTO;
 import com.inspire.inspirebe.user.dto.UserResponseDTO;
 import com.inspire.inspirebe.user.dto.UserUpdateDTO;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 // 2. 인터페이스 선언은 한 번만 합니다.
 public interface UserService {
@@ -18,6 +22,8 @@ public interface UserService {
      */
     boolean isIdDuplicated(String loginId);
 
+    List<UserResponseDTO> getAllUsers(String statusStr);
+
     // --- 조장님이 추가하신 CRUD 메서드들을 하나의 중괄호 안으로 합칩니다 ---
     // Read
     UserResponseDTO getUser(Long id);
@@ -27,7 +33,12 @@ public interface UserService {
     // Update
     void updateUser(Long id, UserUpdateDTO userUpdateDTO);
 
+    void updateUserByAdmin(Long id, AdminUserUpdateDTO userUpdateDTO);
+
     void updatePassword(Long id, String oldPassword, String newPassword);
+
+    @Transactional(readOnly = true)
+    List<UserResponseDTO> getSuspendedUsers();
 
     // Delete
     void deleteUser(Long id);

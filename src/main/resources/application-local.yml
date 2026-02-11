@@ -25,6 +25,7 @@ spring:
     properties:
       hibernate:
         format-sql: true
+    defer-datasource-initialization: true
 
     defer-datasource-initialization: true
 
