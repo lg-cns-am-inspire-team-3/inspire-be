@@ -1,12 +1,13 @@
 package com.inspire.inspirebe.user.service;
 
 import com.inspire.inspirebe.user.dto.UserResponseDTO;
+import com.inspire.inspirebe.user.dto.UserUpdateDTO;
 import com.inspire.inspirebe.user.mapper.UserEntityMapper;
+import com.inspire.inspirebe.user.entity.enums.UserStatus;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -20,19 +21,21 @@ public class AdminServiceImpl implements AdminService {
 
     private final UserRepository userRepository;
 
+    /**
+     * 1. 회원가입 승인
+     */
     @Override
-    @Transactional // 데이터 수정을 위해 반드시 필요합니다!
-    public void approveUser(Long id, Integer salary) {
-        // 1. 해당 유저가 있는지 확인
+    @Transactional
+    public void approveUser(Long id) {
         UserEntity user = userRepository.findById(id)
-                .orElseThrow(EntityNotFoundException::new);
+                .orElseThrow(() -> new EntityNotFoundException("ID: " + id + " 사용자를 찾을 수 없습니다."));
 
-        // 2. 시급 설정 및 상태 변경 (UserStatus Enum 사용 가정)
-        user.changeSalary(salary);
-        user.activeUser();
-
+        user.activeUser(); 
     }
 
+    /**
+     * 2. 전체 근무자 리스트 조회
+     */
     @Override
     @Transactional(readOnly = true)
     public List<UserResponseDTO> getAllUsers() {
@@ -42,12 +45,56 @@ public class AdminServiceImpl implements AdminService {
                 .toList();
     }
 
+    /**
+     * 3. 승인 대기 중인 유저 리스트 조회
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List<UserResponseDTO> getSuspendedUsers() {
+        return userRepository.findByStatus(UserStatus.SUSPENDED) 
+                .stream()
+                .map(UserEntityMapper::toResponse)
+                .toList();
+    }
+
+    /**
+     * 4. 근무자 상세 정보 조회
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public UserResponseDTO getUserDetail(Long id) {
+        UserEntity user = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("ID: " + id + " 근무자를 찾을 수 없습니다."));
+        
+        return UserEntityMapper.toResponse(user); 
+    }
+
+    /**
+     * 5. 근무자 삭제
+     */
     @Override
     @Transactional
     public void deleteUser(Long id) {
         UserEntity user = userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("해당 사용자를 찾을 수 없습니다."));
-        
+                .orElseThrow(() -> new EntityNotFoundException("ID: " + id + " 사용자를 찾을 수 없습니다."));
         userRepository.delete(user);
     }
-}
+
+    /**
+     * 6. 근무자 정보 수정
+     */
+    @Override
+    @Transactional
+    public void updateUser(Long id, UserUpdateDTO request) {
+        UserEntity user = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("ID: " + id + " 근무자를 찾을 수 없습니다."));
+
+        // Update<T> 바인딩을 활용한 선택적 업데이트
+        request.getName().ifPresent(user::setName);
+        request.getContact().ifPresent(user::setContact);
+        request.getEmail().ifPresent(user::setEmail);
+        request.getAddress().ifPresent(user::setAddress);
+        // 시급 변경 (Entity에 구현된 changeSalary 메서드 호출)
+        request.getSalary().ifPresent(user::changeSalary);
+    }
+} // 클래스 닫는 중괄호
