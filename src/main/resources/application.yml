@@ -1,12 +1,12 @@
 server:
-  port: 8081
+  port: 8080
   
 spring:
   application:
     name: inspire-be
 
   profiles:
-    active: local
+    active: dev
 
   # oauth2 client configuration if needed
 
