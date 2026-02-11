@@ -70,7 +70,11 @@ public class UserEntity extends BaseEntity {
         this.salary = salary;
     }
 
-    public void activeUser() {
+    public void changeAddress(String address) {
+        this.address = address;
+    }
+
+    public void activateUser() {
         this.status = UserStatus.ACTIVE;
     }
 }

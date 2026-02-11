@@ -12,28 +12,21 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration(proxyBeanMethods = false)
-@Profile("!local")
-public class RedisConfig {
+@Profile("local")
+public class RedisLocalConfig {
 
     private final String host;
     private final int port;
-    private final String password;
 
-    public RedisConfig(@Value("${spring.data.redis.host}") String host,
-                       @Value("${spring.data.redis.port}") int port,
-                       @Value("${spring.data.redis.password}") String password) {
+    public RedisLocalConfig(@Value("${spring.data.redis.host}") String host,
+                       @Value("${spring.data.redis.port}") int port) {
         this.host = host;
         this.port = port;
-        this.password = password;
     }
 
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
-        RedisStandaloneConfiguration config = new RedisStandaloneConfiguration();
-        config.setHostName(host);
-        config.setPort(port);
-        config.setPassword(password);
-        return new LettuceConnectionFactory(config);
+        return new LettuceConnectionFactory(host, port);
     }
 
     @Primary

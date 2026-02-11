@@ -2,11 +2,6 @@ spring:
   application:
     name: inspire-be
 
-  profiles:
-    active: dev
-
-  # oauth2 client configuration if needed
-
 management:
   endpoints:
     web:

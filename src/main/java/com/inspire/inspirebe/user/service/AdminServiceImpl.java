@@ -30,7 +30,7 @@ public class AdminServiceImpl implements AdminService {
         UserEntity user = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("ID: " + id + " 사용자를 찾을 수 없습니다."));
 
-        user.activeUser(); 
+        user.activateUser();
     }
 
     /**
@@ -90,10 +90,10 @@ public class AdminServiceImpl implements AdminService {
                 .orElseThrow(() -> new EntityNotFoundException("ID: " + id + " 근무자를 찾을 수 없습니다."));
 
         // Update<T> 바인딩을 활용한 선택적 업데이트
-        request.getName().ifPresent(user::setName);
-        request.getContact().ifPresent(user::setContact);
-        request.getEmail().ifPresent(user::setEmail);
-        request.getAddress().ifPresent(user::setAddress);
+        request.getName().ifPresent(user::changeName);
+        request.getContact().ifPresent(user::changeContact);
+        request.getEmail().ifPresent(user::changeEmail);
+        request.getAddress().ifPresent(user::changeAddress);
         // 시급 변경 (Entity에 구현된 changeSalary 메서드 호출)
         request.getSalary().ifPresent(user::changeSalary);
     }
