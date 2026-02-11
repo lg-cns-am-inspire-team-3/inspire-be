@@ -13,28 +13,29 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class AttendanceDTO {
+    private Long userId;
     private LocalDate workDate;
     private LocalDateTime checkIn;
     private LocalDateTime checkOut;
-    private LocalDateTime totalTime;
-    private Integer totalAmount;
+    private Integer workMinute;
 
     @Builder
-    public AttendanceDTO(LocalDate workDate, LocalDateTime checkIn, LocalDateTime checkOut, LocalDateTime totalTime, Integer totalAmount) {
+    public AttendanceDTO(Long userId, LocalDate workDate, LocalDateTime checkIn, LocalDateTime checkOut, Integer workMinute) {
+        this.userId = userId;
         this.workDate = workDate;
         this.checkIn = checkIn;
         this.checkOut = checkOut;
-        this.totalTime = totalTime;
-        this.totalAmount = totalAmount;
+        this.workMinute = workMinute;
     }
 
 
     public static AttendanceDTO from(Attend attend) {
         return AttendanceDTO.builder()
+                .userId(attend.getUser().getId())
                 .workDate(attend.getWorkDate())
                 .checkIn(attend.getCheckIn())
                 .checkOut(attend.getCheckOut())
-                .totalTime(attend.getTotalTime())
+                .workMinute(attend.getWorkMinute())
                 .build();
     }
 }

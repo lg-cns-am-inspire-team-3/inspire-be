@@ -7,6 +7,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -33,6 +34,6 @@ public class Attend extends BaseEntity {
     @Column(name = "check_out")
     private LocalDateTime checkOut;
 
-    @Column(name = "total_time")
-    private LocalDateTime totalTime;
+    @Column(name = "work_minute")
+    private Integer workMinute;
 }
