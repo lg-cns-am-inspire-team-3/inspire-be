@@ -27,7 +27,7 @@ public class AuthIntegrationTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private JsonMapper jsonMapper;
+    private JsonMapper objectMapper;
 
     @Autowired
     private UserService userService;
@@ -46,8 +46,8 @@ public class AuthIntegrationTest {
         loginDto.setPassword("password123");
 
         mockMvc.perform(post("/api/v1/auth/login")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(jsonMapper.writeValueAsString(loginDto)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(loginDto)))
                 .andExpect(status().is3xxRedirection()); // 302 확인
     }
 
@@ -62,9 +62,9 @@ public class AuthIntegrationTest {
         loginDto.setPassword("wrongpassword");
 
         mockMvc.perform(post("/api/v1/auth/login")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(jsonMapper.writeValueAsString(loginDto)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(loginDto)))
                 // 👇 [핵심 수정] 실제 응답이 302(REDIRECTION)이므로 이를 기대하도록 변경
-                .andExpect(status().is3xxRedirection()); 
+                .andExpect(status().is3xxRedirection());
     }
 }

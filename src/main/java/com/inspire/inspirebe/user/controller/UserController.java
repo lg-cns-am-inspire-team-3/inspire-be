@@ -5,8 +5,8 @@ import com.inspire.inspirebe.user.dto.UserResponseDTO;
 import com.inspire.inspirebe.user.dto.UserUpdateDTO;
 import com.inspire.inspirebe.user.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -39,22 +39,22 @@ public class UserController {
     // --- 조장님이 추가하신 CRUD API ---
 
     // Read (단건 조회)
-    @GetMapping("/{id}")
-    public ResponseEntity<UserResponseDTO> getUser(@PathVariable("id") Long id) {
+    @GetMapping("/me")
+    public ResponseEntity<UserResponseDTO> getUser(@AuthenticationPrincipal Long id) {
         UserResponseDTO response = userService.getUser(id);
         return ResponseEntity.ok(response);
     }
 
     // Update (수정 - 임시)
-    @PatchMapping("/{id}")
-    public ResponseEntity<Void> updateUser(@PathVariable("id") Long id, @RequestBody UserUpdateDTO userUpdateDTO) {
+    @PatchMapping("/me")
+    public ResponseEntity<Void> updateUser(@AuthenticationPrincipal Long id, @RequestBody UserUpdateDTO userUpdateDTO) {
         userService.updateUser(id, userUpdateDTO);
         return ResponseEntity.noContent().build();
     }
 
     // Delete (삭제)
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable("id") Long id) {
+    @DeleteMapping("/me")
+    public ResponseEntity<Void> deleteUser(@AuthenticationPrincipal Long id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }

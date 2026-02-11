@@ -46,6 +46,7 @@ public class JwtTokenServiceImpl implements JwtTokenService {
                 .httpOnly(true)
                 .maxAge(14 * 24 * 60 * 60)
                 .secure(true)
+                .sameSite("None")
                 .build()
         );
     }
