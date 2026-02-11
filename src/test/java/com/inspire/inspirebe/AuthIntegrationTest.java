@@ -1,16 +1,28 @@
 package com.inspire.inspirebe;
 
+<<<<<<< HEAD
+        =======
+import com.fasterxml.jackson.databind.ObjectMapper;
+>>>>>>> 5f359c43b329924e157af11c48dc093ebe9278ed
 import com.inspire.inspirebe.auth.dto.UserLoginDTO;
 import com.inspire.inspirebe.auth.service.JwtTokenService;
 import com.inspire.inspirebe.user.service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+<<<<<<< HEAD
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import tools.jackson.databind.json.JsonMapper;
+=======
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+>>>>>>> 5f359c43b329924e157af11c48dc093ebe9278ed
 
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -27,7 +39,7 @@ public class AuthIntegrationTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private JsonMapper jsonMapper;
+    private JsonMapper objectMapper;
 
     @Autowired
     private UserService userService;
@@ -46,8 +58,8 @@ public class AuthIntegrationTest {
         loginDto.setPassword("password123");
 
         mockMvc.perform(post("/api/v1/auth/login")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(jsonMapper.writeValueAsString(loginDto)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(loginDto)))
                 .andExpect(status().is3xxRedirection()); // 302 확인
     }
 
@@ -62,9 +74,9 @@ public class AuthIntegrationTest {
         loginDto.setPassword("wrongpassword");
 
         mockMvc.perform(post("/api/v1/auth/login")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(jsonMapper.writeValueAsString(loginDto)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(loginDto)))
                 // 👇 [핵심 수정] 실제 응답이 302(REDIRECTION)이므로 이를 기대하도록 변경
-                .andExpect(status().is3xxRedirection()); 
+                .andExpect(status().is3xxRedirection());
     }
 }

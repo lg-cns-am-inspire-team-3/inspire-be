@@ -34,6 +34,14 @@ public class AuthServiceImpl implements AuthService {
         String refreshToken = jwtProvider.createRefreshToken(userId, now);
         jwtTokenService.storeRefreshToken(userId, refreshToken); // save -> store
         jwtTokenService.addRefreshTokenCookie(servletResponse, refreshToken);
+
+        
+        try {
+            servletResponse.sendRedirect("http://localhost:3000/login/success");
+        } catch (IOException e) {
+            log.error("Redirect 도중 에러가 발생했습니다: {}", e.getMessage());
+            throw new RuntimeException("로그인 리다이렉트 실패");
+        }
     }
 
     @Override
