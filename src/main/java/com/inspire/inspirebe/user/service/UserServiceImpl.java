@@ -138,7 +138,7 @@ public class UserServiceImpl implements UserService {
         userUpdateDTO.getName().ifPresent(userEntity::changeName);
         userUpdateDTO.getEmail().ifPresent(userEntity::changeEmail);
         userUpdateDTO.getContact().ifPresent(userEntity::changeContact);
-        userUpdateDTO.getAddress().ifPresent(userEntity::changeEmail);
+        userUpdateDTO.getAddress().ifPresent(userEntity::changeAddress);
     }
     /**
      * 9. 특정 유저 업데이트 (유저용)
