@@ -20,8 +20,8 @@ import java.net.URI;
 @RequiredArgsConstructor
 public class AuthController {
 
-    @Value("${front.redirect.url}")
-    private String redirectURL;
+    @Value("${frontend.url}")
+    private String frontendURL;
     private final AuthService authService;
     /**
      * 사용자 로그인
@@ -33,7 +33,7 @@ public class AuthController {
         log.info("Login request received for ID: {}", userLoginDTO.getLoginId());
 
         authService.login(servletResponse, userLoginDTO);
-        URI uri = URI.create(redirectURL);
+        URI uri = URI.create(frontendURL + "/login/success");
 
         // 프론트엔드(Axios) 리다이렉트
         return ResponseEntity.status(HttpStatus.FOUND)

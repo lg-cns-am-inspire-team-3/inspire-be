@@ -1,7 +1,7 @@
 spring:
   config:
     activate:
-      on-profile: dev
+      on-profile: prod
 
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
@@ -19,7 +19,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: none
     show-sql: true
 
     properties:
@@ -33,4 +33,20 @@ spring:
       password: ${REDIS_PASSWORD}
 
 server:
-  port: 8080
+  port: 8443
+
+  ssl:
+    enabled: true
+    key-store: /certs/keystore.p12
+    key-store-type: PKCS12
+    key-store-password: ${SSL_KEY_STORE_PASSWORD}
+    key-alias: ${SSL_KEY_ALIAS}
+
+front:
+  redirect:
+    url: "http://localhost:3000"
+
+cookie:
+  policy:
+    samesite: None
+    secure: true

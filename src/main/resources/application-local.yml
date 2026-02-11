@@ -22,23 +22,25 @@ spring:
     hibernate:
       ddl-auto: create-drop
     show-sql: true
+
     properties:
       hibernate:
         format-sql: true
+
+    defer-datasource-initialization: true
 
   data:
     redis:
       host: localhost
       port: 6379
 
+server:
+  port: 8080
+
+frontend:
+  url: "http://localhost:3000"
+
 management:
   health:
     redis:
       enabled: false
-
-server:
-  port: 8080
-
-front:
-  redirect:
-    url: "http://localhost:3000"
