@@ -1,6 +1,5 @@
 package com.inspire.inspirebe.auth.controller;
 
-import com.inspire.inspirebe.auth.dto.LogoutRequestDto;
 import com.inspire.inspirebe.auth.dto.TokenResponseDTO;
 import com.inspire.inspirebe.auth.dto.UserLoginDTO;
 import com.inspire.inspirebe.auth.service.AuthService;
@@ -11,9 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -44,7 +40,7 @@ public class AuthController {
                 .location(uri)
                 .build();
     }
-    
+
     /**
      * 로그아웃
      * Refresh Token 삭제 및 쿠키 초기화를 수행합니다.

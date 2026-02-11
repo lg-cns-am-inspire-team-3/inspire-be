@@ -31,7 +31,6 @@ public class AttendController {
          * 3. 중복 출석 방지
          * 4. 출석 기록 저장
          */
-
         // attendService.attend(principal, request.getQrToken());
 
         return ResponseEntity.noContent().build();

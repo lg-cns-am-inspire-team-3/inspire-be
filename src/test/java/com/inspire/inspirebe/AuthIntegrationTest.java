@@ -1,28 +1,16 @@
 package com.inspire.inspirebe;
 
-<<<<<<< HEAD
-        =======
-import com.fasterxml.jackson.databind.ObjectMapper;
->>>>>>> 5f359c43b329924e157af11c48dc093ebe9278ed
 import com.inspire.inspirebe.auth.dto.UserLoginDTO;
 import com.inspire.inspirebe.auth.service.JwtTokenService;
 import com.inspire.inspirebe.user.service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-<<<<<<< HEAD
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import tools.jackson.databind.json.JsonMapper;
-=======
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
->>>>>>> 5f359c43b329924e157af11c48dc093ebe9278ed
 
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
