@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public List<UserResponseDTO> getAllUsers(String statusStr) {
-        UserStatus status = statusStr != null ? UserStatus.valueOf(statusStr) : null;
+        UserStatus status = statusStr != null ? UserStatus.valueOf(statusStr.toUpperCase()) : null;
 
         Specification<UserEntity> spec = Specification
                 .where(UserSpecification.hasStatus(status));
@@ -119,7 +119,7 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 7. 유저 Role 조회
-     *    근데, 쓸 일 없음... 테스트 코드에서 잠깐 썼음.
+     *    Jwt access token 만들 때 사용
      */
     @Override
     @Transactional(readOnly = true)
@@ -138,7 +138,7 @@ public class UserServiceImpl implements UserService {
         userUpdateDTO.getName().ifPresent(userEntity::changeName);
         userUpdateDTO.getEmail().ifPresent(userEntity::changeEmail);
         userUpdateDTO.getContact().ifPresent(userEntity::changeContact);
-        userUpdateDTO.getAddress().ifPresent(userEntity::changeEmail);
+        userUpdateDTO.getAddress().ifPresent(userEntity::changeAddress);
     }
     /**
      * 9. 특정 유저 업데이트 (유저용)

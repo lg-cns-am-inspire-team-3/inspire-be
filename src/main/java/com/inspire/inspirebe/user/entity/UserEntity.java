@@ -75,7 +75,7 @@ public class UserEntity extends BaseEntity {
     }
 
     public void changeUserStatus(String status) {
-        this.status = UserStatus.valueOf(status);
+        this.status = UserStatus.valueOf(status.toUpperCase());
     }
 
     public void activateUser() {

@@ -1,9 +1,8 @@
-package com.inspire.inspirebe.admin;
+package com.inspire.inspirebe.admin.controller;
 
 import com.inspire.inspirebe.attend.service.AttendService;
 import com.inspire.inspirebe.user.dto.AdminUserUpdateDTO;
 import com.inspire.inspirebe.user.dto.UserResponseDTO;
-import com.inspire.inspirebe.user.dto.UserUpdateDTO;
 import com.inspire.inspirebe.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
