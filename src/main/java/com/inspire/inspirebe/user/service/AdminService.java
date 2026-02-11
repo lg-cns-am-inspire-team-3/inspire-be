@@ -8,4 +8,5 @@ import com.inspire.inspirebe.user.entity.UserEntity;
 public interface AdminService {
     void approveUser(Long id, Integer salary);
     List<UserResponseDTO> getAllUsers();
+    void deleteUser(Long id);
 }
