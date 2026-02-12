@@ -36,11 +36,11 @@ public class AttendServiceImpl implements AttendService {
     }
 
     @Override
-    public List<AttendResponseDTO> getAllAttends(Long userId, Integer year, Integer month) {
+    public List<AttendResponseDTO> getAllAttends(Long userId, Integer year, Integer month, Integer day) {
 
         Specification<Attend> spec = Specification
                 .where(AttendSpecification.hasUserId(userId))
-                .and(AttendSpecification.workDateBetween(year, month));
+                .and(AttendSpecification.workDateBetween(year, month, day));
 
         List<Attend> results = attendRepository.findAll(
                 spec,

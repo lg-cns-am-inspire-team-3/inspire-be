@@ -77,3 +77,15 @@ INSERT INTO attendances (user_id, work_date, check_in, check_out, work_minute)
 VALUES(6, '2020-12-27', '2020-12-27 07:30:00', '2020-12-27 18:30:00', 660);
 INSERT INTO attendances (user_id, work_date, check_in, check_out, work_minute)
 VALUES(7, '2020-12-28', '2020-12-28 07:30:00', '2020-12-28 18:30:00', 660);
+INSERT INTO attendances (user_id, work_date, check_in, check_out, work_minute)
+VALUES(2, '2020-12-25', '2020-12-23 07:30:00', '2020-12-23 18:30:00', 660);
+INSERT INTO attendances (user_id, work_date, check_in, check_out, work_minute)
+VALUES(3, '2020-12-25', '2020-12-24 07:30:00', '2020-12-24 18:30:00', 660);
+INSERT INTO attendances (user_id, work_date, check_in, check_out, work_minute)
+VALUES(4, '2020-12-24', '2020-12-25 07:30:00', '2020-12-25 18:30:00', 660);
+INSERT INTO attendances (user_id, work_date, check_in, check_out, work_minute)
+VALUES(5, '2020-12-30', '2020-12-26 07:30:00', '2020-12-26 18:30:00', 660);
+INSERT INTO attendances (user_id, work_date, check_in, check_out, work_minute)
+VALUES(6, '2020-01-01', '2020-12-27 07:30:00', '2020-12-27 18:30:00', 660);
+INSERT INTO attendances (user_id, work_date, check_in, check_out, work_minute)
+VALUES(7, '2020-01-02', '2020-12-28 07:30:00', '2020-12-28 18:30:00', 660);

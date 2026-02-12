@@ -19,7 +19,7 @@ public interface AttendService {
      */
     AttendResponseDTO getAttend(Long id);
 
-    List<AttendResponseDTO> getAllAttends(Long userId, Integer year, Integer month);
+    List<AttendResponseDTO> getAllAttends(Long userId, Integer year, Integer month, Integer day);
 
     void deleteAttend(Long id);
 

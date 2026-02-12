@@ -75,7 +75,7 @@ public class AdminController {
      * 6.
      */
 
-    // 이 밑으로 {id}는 qr의 id입니다.
+    // 이 밑으로 {id}는 attendance의 id입니다.
     // 직접적으로 db 수정 권한이 있습니다.
 
     @PatchMapping("/attends/{id}")
@@ -93,9 +93,10 @@ public class AdminController {
     public ResponseEntity<List<AttendResponseDTO>> getAllAttends(
             @RequestParam(value = "userId", required = false) Long userId,
             @RequestParam(value = "year", required = false) Integer year,
-            @RequestParam(value = "month", required = false) Integer month
+            @RequestParam(value = "month", required = false) Integer month,
+            @RequestParam(value = "day", required = false) Integer day
     ) {
-        return ResponseEntity.ok(attendService.getAllAttends(userId, year, month));
+        return ResponseEntity.ok(attendService.getAllAttends(userId, year, month, day));
     }
 
 
