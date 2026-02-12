@@ -23,7 +23,7 @@ public interface UserService {
      */
     boolean isIdDuplicated(String loginId);
 
-    List<UserResponseDTO> getAllUsers(String statusStr);
+    List<UserResponseDTO> getAllUsers(String statusStr, String roleStr);
 
     // --- 조장님이 추가하신 CRUD 메서드들을 하나의 중괄호 안으로 합칩니다 ---
     // Read

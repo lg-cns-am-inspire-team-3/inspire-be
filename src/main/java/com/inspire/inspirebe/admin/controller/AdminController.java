@@ -38,9 +38,10 @@ public class AdminController {
      */
     @GetMapping("/users")
     public ResponseEntity<List<UserResponseDTO>> getUsers(
-            @RequestParam(required = false) String status
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String role
     ) {
-        return ResponseEntity.ok(userService.getAllUsers(status));
+        return ResponseEntity.ok(userService.getAllUsers(status, role));
     }
 
     /**

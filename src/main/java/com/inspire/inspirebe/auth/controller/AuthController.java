@@ -33,12 +33,9 @@ public class AuthController {
         log.info("Login request received for ID: {}", userLoginDTO.getLoginId());
 
         authService.login(servletResponse, userLoginDTO);
-        URI uri = URI.create(frontendURL + "/login/success");
 
-        // 프론트엔드(Axios) 리다이렉트
-        return ResponseEntity.status(HttpStatus.FOUND)
-                .location(uri)
-                .build();
+        // 프론트엔드(Axios) 그냥 성공임
+        return ResponseEntity.noContent().build();
     }
 
     /**

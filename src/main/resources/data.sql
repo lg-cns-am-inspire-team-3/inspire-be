@@ -12,6 +12,18 @@ INSERT INTO users (id, email, name, contact, address, role, status, salary)
 VALUES(6, 'user5@gmail.com', 'username5', '010-1234-5683', 'Daegu', 'USER', 'ACTIVE', 20000);
 INSERT INTO users (id, email, name, contact, address, role, status, salary)
 VALUES(7, 'user6@gmail.com', 'username6', '010-1234-5684', 'Busan', 'USER', 'ACTIVE', 18000);
+INSERT INTO users (name, contact, address, status, salary, role, email, created_at, updated_at)
+VALUES ('테스트1', '010-1111-0001', '서울시 강남구', 'SUSPENDED', NULL, 'USER', 'test1@example.com', NOW(), NOW());
+INSERT INTO users (name, contact, address, status, salary, role, email, created_at, updated_at)
+VALUES ('테스트2', '010-1111-0002', '서울시 서초구', 'SUSPENDED', NULL, 'USER', 'test2@example.com', NOW(), NOW());
+INSERT INTO users (name, contact, address, status, salary, role, email, created_at, updated_at)
+VALUES ('테스트3', '010-1111-0003', '경기도 성남시', 'SUSPENDED', NULL, 'USER', 'test3@example.com', NOW(), NOW());
+INSERT INTO users (name, contact, address, status, salary, role, email, created_at, updated_at)
+VALUES ('테스트4', '010-1111-0004', '인천시 부평구', 'SUSPENDED', NULL, 'USER', 'test4@example.com', NOW(), NOW());
+INSERT INTO users (name, contact, address, status, salary, role, email, created_at, updated_at)
+VALUES ('테스트5', '010-1111-0005', '서울시 송파구', 'SUSPENDED', NULL, 'USER', 'admin@example.com', NOW(), NOW());
+INSERT INTO users (name, contact, address, status, salary, role, email, created_at, updated_at)
+VALUES ('테스트6', '010-1111-0006', '경기도 수원시', 'SUSPENDED', NULL, 'USER', 'test6@example.com', NOW(), NOW());
 
 -- admin, admin
 INSERT INTO user_credentials (user_id, login_id, password_hash)
