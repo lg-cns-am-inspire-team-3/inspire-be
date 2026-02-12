@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface AttendRepository extends JpaRepository<Attend, Long>, JpaSpecificationExecutor<Attend> {
-    @Query("SELECT a FROM Attend a JOIN FETCH a.user WHERE a.user.id = :userId ORDER BY a.workDate ")
-    List<Attend> findWithUserId(@Param("userId") Long userId);
+    @Query("SELECT a FROM Attend a JOIN FETCH a.user WHERE a.user.id = :userId AND a.workDate = :workDate ORDER BY a.workDate")
+    List<Attend> findWithUserIdAndWorkDate(@Param("userId") Long userId, @Param("workDate") LocalDate workDate);
     @Query("SELECT a FROM Attend a JOIN FETCH a.user WHERE a.workDate BETWEEN :start AND :end")
     List<Attend> findAllByMonth(@Param("start") LocalDate start, @Param("end") LocalDate end);
 

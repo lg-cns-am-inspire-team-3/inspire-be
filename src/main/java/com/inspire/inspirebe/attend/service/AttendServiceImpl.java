@@ -1,6 +1,5 @@
 package com.inspire.inspirebe.attend.service;
 
-import com.inspire.inspirebe.attend.dto.AttendRequestDTO;
 import com.inspire.inspirebe.attend.dto.AttendResponseDTO;
 import com.inspire.inspirebe.attend.dto.AttendUpdateDTO;
 import com.inspire.inspirebe.attend.entity.Attend;
@@ -24,35 +23,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AttendServiceImpl implements AttendService {
 
+    private static final String VALID_QR_TOKEN = "ATTENDANCE_QR_TEST_OKOK_LGCNS";
+
     private final AttendRepository attendRepository;
     private final UserService userService;
 
-    /*
-     * 새로운 attend를 기록
-     * 중복 처리 필요
-     */
-    @Override
-    @Transactional
-    public void checkIn(Long userId, AttendRequestDTO request) {
-        UserEntity user = userService.getReferenceBy(userId);
-        Attend attend = Attend.builder()
-                .user(user)
-                .build();
-        attendRepository.save(attend);
-    }
-
-    /*
-     * 기존의 attend 수정
-     */
-    @Override
-    @Transactional
-    public void checkOut(Long userId, AttendRequestDTO request) {
-        /*
-        Attend attend = attendRepository.findWithUserId(userId)
-                .orElseThrow(() -> new EntityNotFoundException("ID: " + userId + " 근무자를 찾을 수 없습니다."));
-        attend.checkOut();
-         */
-    }
 
     @Override
     public AttendResponseDTO getAttend(Long id) {
@@ -108,5 +83,55 @@ public class AttendServiceImpl implements AttendService {
                 .filter(Attend::calculatable)
                 .map(AttendEntityMapper::toResponse)
                 .toList();
+    }
+
+
+    @Override
+    @Transactional
+    public void attend(Long userId, String qrToken) { //출석처리 기능
+
+        //security에서 설정한 후에는 if문 삭제, 로그인 안 하고 QR 접근 막는 코드
+        if (userId == null) {
+            throw new IllegalStateException("로그인이 필요합니다.");
+        }
+
+        validateQrToken(qrToken);
+
+        // 로그인한 사용자 정보 가져오기
+        // 없는 사용자가 시도 불가 (인증이 되었다는 것은 로그인의 성공)
+        UserEntity user = userService.getReferenceBy(userId);
+        List<Attend> attends = attendRepository.findWithUserIdAndWorkDate(userId,LocalDate.now());
+
+        if(attends.size() > 1) {
+            throw new IllegalStateException("무언가 잘못됨");
+        }
+
+        if(attends.isEmpty()) {
+            Attend attend = Attend.builder().
+                    user(user).
+                    build();
+            attendRepository.save(attend);
+            System.out.println("출근 처리 완료");
+        } else {
+            Attend attend = attends.get(0);
+
+            if(attend.getCheckOut() != null) {
+                throw new IllegalStateException("이미 퇴근 처리 되었습니다.");
+            }
+            attend.checkOut();
+            System.out.println("퇴근 처리 완료");
+        }
+    }
+
+    @Override
+    public void validateQrToken(String qrToken) { // QR 토큰 확인하는 함수
+
+        if (qrToken == null || qrToken.isBlank()) {
+            throw new IllegalArgumentException("QR 토큰이 비어있습니다.");
+        }
+
+        if (!VALID_QR_TOKEN.equals(qrToken)) {
+            throw new IllegalArgumentException("유효하지 않은 출석 QR입니다.");
+        }
     }
 }
