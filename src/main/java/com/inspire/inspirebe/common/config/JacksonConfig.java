@@ -12,9 +12,10 @@ public class JacksonConfig {
 
     @Bean
     public JsonMapperBuilderCustomizer jsonCustomizer() {
-        SimpleModule customModule = new SimpleModule();
-        customModule.addDeserializer(Update.class, new UpdateDeserializer<>());
-
-        return builder -> builder.addModule(customModule);
+        return builder -> {
+            SimpleModule module = new SimpleModule();
+            module.addDeserializer(Update.class, new UpdateDeserializer<>());
+            builder.addModule(module);
+        };
     }
 }

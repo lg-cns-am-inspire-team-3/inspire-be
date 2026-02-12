@@ -28,6 +28,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        Collections.list(request.getHeaderNames())
+                .forEach(h -> log.info("header {} = {}", h, request.getHeader(h)));
         // Authorization header의 value 읽기
         String header = request.getHeader("Authorization");
 

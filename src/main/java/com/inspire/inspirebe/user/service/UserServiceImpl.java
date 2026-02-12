@@ -14,6 +14,7 @@ import com.inspire.inspirebe.user.repository.UserRepository;
 import com.inspire.inspirebe.user.specification.UserSpecification;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -163,6 +165,14 @@ public class UserServiceImpl implements UserService {
     public void updateUserByAdmin(Long id, AdminUserUpdateDTO userUpdateDTO) {
         UserEntity userEntity = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 유저입니다."));
+
+        log.info("user update dto");
+        log.info("status : {}", userUpdateDTO.getStatus().getValue());
+        log.info("name : {}", userUpdateDTO.getName().getValue());
+        log.info("email : {}", userUpdateDTO.getEmail().getValue());
+        log.info("contact : {}", userUpdateDTO.getContact().getValue());
+        log.info("address : {}", userUpdateDTO.getAddress().getValue());
+        log.info("salary : {}", userUpdateDTO.getSalary().getValue());
 
         applyCommonUpdate(userEntity, userUpdateDTO);
         userUpdateDTO.getSalary().ifPresent(userEntity::changeSalary);

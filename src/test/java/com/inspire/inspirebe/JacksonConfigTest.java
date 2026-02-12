@@ -16,7 +16,6 @@ import tools.jackson.databind.json.JsonMapper;
 @ImportAutoConfiguration(JacksonAutoConfiguration.class)
 public class JacksonConfigTest {
 
-    /*
     @Autowired
     JsonMapper objectMapper;
 
@@ -33,11 +32,12 @@ public class JacksonConfigTest {
                 "{}"
         };
 
+
         for(String json : jsons) {
             UpdateTestDTO dto = objectMapper.readValue(json, UpdateTestDTO.class);
             System.out.println("json: " + json);
             System.out.println("dto: " + dto);
         }
     }
-     */
+
 }

@@ -5,6 +5,7 @@ import com.inspire.inspirebe.attend.dto.AttendResponseDTO;
 import com.inspire.inspirebe.attend.service.AttendService;
 import com.inspire.inspirebe.admin.dto.AdminUserUpdateDTO;
 import com.inspire.inspirebe.user.dto.UserResponseDTO;
+import com.inspire.inspirebe.user.dto.UserUpdateDTO;
 import com.inspire.inspirebe.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,7 @@ public class AdminController {
      * PATCH /api/v1/admin/users/{id}
      */
     @PatchMapping("/users/{id}")
-    public ResponseEntity<String> updateUser(@PathVariable Long id, AdminUserUpdateDTO userUpdateDTO) {
+    public ResponseEntity<String> updateUser(@PathVariable Long id, @RequestBody AdminUserUpdateDTO userUpdateDTO) {
         userService.updateUserByAdmin(id, userUpdateDTO);
         return ResponseEntity.ok("근무자 정보가 성공적으로 수정되었습니다.");
     }

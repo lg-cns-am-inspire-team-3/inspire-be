@@ -3,6 +3,7 @@ package com.inspire.inspirebe.binding;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import tools.jackson.databind.annotation.JsonDeserialize;
 
 import java.util.function.Consumer;
 
