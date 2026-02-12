@@ -1,23 +1,40 @@
 package com.inspire.inspirebe.attend.controller;
 
 import com.inspire.inspirebe.attend.dto.AttendRequestDTO;
+import com.inspire.inspirebe.attend.dto.AttendResponseDTO;
 import com.inspire.inspirebe.attend.service.AttendService;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/attend")
+@RequestMapping("/api/v1/attends")
 @RequiredArgsConstructor
 public class AttendController {
 
-    private final AttendService attendService; 
+    private final AttendService attendService;
 
+    @PostMapping("")
+    public ResponseEntity<?> createAttend(@AuthenticationPrincipal Long userId, AttendRequestDTO request) {
+        attendService.checkIn(userId, request);
+        return null;
+    }
+
+    @PatchMapping("/me")
+    public ResponseEntity<?> updateAttend(@AuthenticationPrincipal Long userId, AttendRequestDTO request) {
+        attendService.checkOut(userId, request);
+        return null;
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<List<AttendResponseDTO>> getAttends(@AuthenticationPrincipal Long userId) {
+        return ResponseEntity.ok(attendService.getAllAttends(userId, null, null));
+    }
     
     @PostMapping("/check")
     public ResponseEntity<Void> attendCheck(

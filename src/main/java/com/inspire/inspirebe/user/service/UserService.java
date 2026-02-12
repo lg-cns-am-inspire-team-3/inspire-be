@@ -1,10 +1,11 @@
 package com.inspire.inspirebe.user.service;
 
 // 1. 모든 import 문은 파일 최상단에 모아야 합니다.
-import com.inspire.inspirebe.user.dto.AdminUserUpdateDTO;
+import com.inspire.inspirebe.admin.dto.AdminUserUpdateDTO;
 import com.inspire.inspirebe.user.dto.UserCreateDTO;
 import com.inspire.inspirebe.user.dto.UserResponseDTO;
 import com.inspire.inspirebe.user.dto.UserUpdateDTO;
+import com.inspire.inspirebe.user.entity.UserEntity;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -37,11 +38,12 @@ public interface UserService {
 
     void updatePassword(Long id, String oldPassword, String newPassword);
 
-    @Transactional(readOnly = true)
     List<UserResponseDTO> getSuspendedUsers();
 
     // Delete
     void deleteUser(Long id);
 
     Long validateCredentials(String loginId, String password);
+
+    UserEntity getReferenceBy(Long id);
 }

@@ -35,7 +35,6 @@ public class UserCredentials extends BaseEntity {
 
 
     public void changePasswordHash(String passwordHash) {
-
         this.passwordHash = passwordHash;
     }
 }

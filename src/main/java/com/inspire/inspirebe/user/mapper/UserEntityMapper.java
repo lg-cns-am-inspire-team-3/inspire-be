@@ -19,8 +19,6 @@ public class UserEntityMapper {
                 .email(userCreateDTO.getEmail())
                 .name(userCreateDTO.getName())
                 .contact(userCreateDTO.getContact())
-                .role(UserRole.USER)
-                .status(UserStatus.SUSPENDED)
                 .build();
     }
 

@@ -1,75 +1,112 @@
 package com.inspire.inspirebe.attend.service;
 
+import com.inspire.inspirebe.attend.dto.AttendRequestDTO;
+import com.inspire.inspirebe.attend.dto.AttendResponseDTO;
+import com.inspire.inspirebe.attend.dto.AttendUpdateDTO;
 import com.inspire.inspirebe.attend.entity.Attend;
+import com.inspire.inspirebe.attend.mapper.AttendEntityMapper;
 import com.inspire.inspirebe.attend.repository.AttendRepository;
-import com.inspire.inspirebe.user.dto.AdminAttendanceResponseDTO;
+import com.inspire.inspirebe.attend.specification.AttendSpecification;
+import com.inspire.inspirebe.user.entity.UserEntity;
+import com.inspire.inspirebe.user.service.UserService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Duration;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class AttendServiceImpl implements AttendService {
 
     private final AttendRepository attendRepository;
+    private final UserService userService;
+
+    /*
+     * 새로운 attend를 기록
+     * 중복 처리 필요
+     */
+    @Override
+    @Transactional
+    public void checkIn(Long userId, AttendRequestDTO request) {
+        UserEntity user = userService.getReferenceBy(userId);
+        Attend attend = Attend.builder()
+                .user(user)
+                .build();
+        attendRepository.save(attend);
+    }
+
+    /*
+     * 기존의 attend 수정
+     */
+    @Override
+    @Transactional
+    public void checkOut(Long userId, AttendRequestDTO request) {
+        /*
+        Attend attend = attendRepository.findWithUserId(userId)
+                .orElseThrow(() -> new EntityNotFoundException("ID: " + userId + " 근무자를 찾을 수 없습니다."));
+        attend.checkOut();
+         */
+    }
 
     @Override
-    public List<AdminAttendanceResponseDTO> getMonthlyAttendances() {
+    public AttendResponseDTO getAttend(Long id) {
+        Attend attend = attendRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("ID: " + id + " 출결을 찾을 수 없습니다."));
+        return AttendEntityMapper.toResponse(attend);
+    }
 
-        LocalDate now = LocalDate.now();
-        LocalDate start = now.withDayOfMonth(1);
-        LocalDate end = now.withDayOfMonth(now.lengthOfMonth());
+    @Override
+    public List<AttendResponseDTO> getAllAttends(Long userId, Integer year, Integer month) {
 
-        List<Attend> attends =
-                attendRepository.findByWorkDateBetween(start, end);
+        Specification<Attend> spec = Specification
+                .where(AttendSpecification.hasUserId(userId))
+                .and(AttendSpecification.workDateBetween(year, month));
 
-        // 🔥 직원별로 그룹화
-        Map<Long, List<Attend>> grouped =
-                attends.stream()
-                        .collect(Collectors.groupingBy(
-                                attend -> attend.getUser().getId()
-                        ));
+        List<Attend> results = attendRepository.findAll(
+                spec,
+                Sort.by(Sort.Direction.DESC, "workDate")
+        );
 
-        return grouped.values().stream()
-                .map(list -> {
-
-                    Attend first = list.get(0);
-
-                    int totalPay = list.stream()
-                            .mapToInt(attend -> {
-
-                                if (attend.getCheckIn() == null || attend.getCheckOut() == null)
-                                    return 0;
-
-                                long minutes = Duration.between(
-                                        attend.getCheckIn(),
-                                        attend.getCheckOut()
-                                ).toMinutes();
-
-                                return (int) minutes * first.getUser().getSalary() / 60;
-                            })
-                            .sum();
-
-                    return AdminAttendanceResponseDTO.builder()
-                            .name(first.getUser().getName())
-                            .checkIn("-")
-                            .checkOut("-")
-                            .monthlyPay(totalPay)
-                            .build();
-                })
+        return results.stream()
+                .filter(Attend::calculatable)
+                .map(AttendEntityMapper::toResponse)
                 .toList();
     }
 
     @Override
-    public Integer getMonthlyTotalSalary() {
+    public void deleteAttend(Long id) {
+        Attend attend = attendRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("ID: " + id + " 출결 정보를 찾을 수 없습니다."));
+        attendRepository.delete(attend);
+    }
 
-        return getMonthlyAttendances().stream()
-                .mapToInt(AdminAttendanceResponseDTO::getMonthlyPay)
-                .sum();
+    @Override
+    public void updateAttend(Long id, AttendUpdateDTO attendUpdateDTO) {
+        Attend attend = attendRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("ID: " + id + " 출결 정보를 찾을 수 없습니다."));
+
+        attendUpdateDTO.getWorkDate().ifPresent(attend::changeWorkDate);
+        attendUpdateDTO.getCheckIn().ifPresent(attend::changeCheckIn);
+        attendUpdateDTO.getCheckOut().ifPresent(attend::changeCheckOut);
+    }
+
+    @Override
+    public List<AttendResponseDTO> getMonthlyAttendances(YearMonth yearMonth) {
+
+        LocalDate start = yearMonth.atDay(1);
+        LocalDate end = yearMonth.atEndOfMonth();
+
+        List<Attend> attends = attendRepository.findAllByMonth(start, end);
+
+        return attends.stream()
+                .filter(Attend::calculatable)
+                .map(AttendEntityMapper::toResponse)
+                .toList();
     }
 }

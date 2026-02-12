@@ -1,6 +1,7 @@
-package com.inspire.inspirebe.user.dto;
+package com.inspire.inspirebe.admin.dto;
 
 import com.inspire.inspirebe.binding.Update;
+import com.inspire.inspirebe.user.dto.UserUpdateDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,7 +12,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class AdminUserUpdateDTO extends UserUpdateDTO{
+public class AdminUserUpdateDTO extends UserUpdateDTO {
     // 시급
     private Update<Integer> salary = Update.absent();
     // 상태

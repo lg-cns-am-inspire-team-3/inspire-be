@@ -1,13 +1,16 @@
 package com.inspire.inspirebe.admin.controller;
 
+import com.inspire.inspirebe.attend.dto.AttendUpdateDTO;
+import com.inspire.inspirebe.attend.dto.AttendResponseDTO;
 import com.inspire.inspirebe.attend.service.AttendService;
-import com.inspire.inspirebe.user.dto.AdminUserUpdateDTO;
+import com.inspire.inspirebe.admin.dto.AdminUserUpdateDTO;
 import com.inspire.inspirebe.user.dto.UserResponseDTO;
 import com.inspire.inspirebe.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.YearMonth;
 import java.util.List;
 
 @RestController
@@ -64,6 +67,45 @@ public class AdminController {
     @PostMapping("/settlements")
     public ResponseEntity<?> settlement() {
         return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * 6.
+     */
+
+    // 이 밑으로 {id}는 qr의 id입니다.
+    // 직접적으로 db 수정 권한이 있습니다.
+
+    @PatchMapping("/attends/{id}")
+    public ResponseEntity<String> updateAttend(@PathVariable Long id, AttendUpdateDTO attendUpdateDTO) {
+        attendService.updateAttend(id, attendUpdateDTO);
+        return ResponseEntity.ok("근무자 정보가 성공적으로 수정되었습니다.");
+    }
+
+    /**
+     * 2. 전체 회원 조회
+     * GET /api/v1/admin/users
+     * 사용자 리스트를 반환합니다.
+     */
+    @GetMapping("/attends")
+    public ResponseEntity<List<AttendResponseDTO>> getAllAttends(
+            @RequestParam(value = "userId", required = false) Long userId,
+            @RequestParam(value = "year", required = false) Integer year,
+            @RequestParam(value = "month", required = false) Integer month
+    ) {
+        return ResponseEntity.ok(attendService.getAllAttends(userId, year, month));
+    }
+
+
+    @GetMapping("/attends/{id}")
+    public ResponseEntity<AttendResponseDTO> getAttend(@PathVariable Long id) {
+        return ResponseEntity.ok(attendService.getAttend(id));
+    }
+
+    @DeleteMapping("/attends/{id}")
+    public ResponseEntity<String> deleteAttend(@PathVariable Long id) {
+        attendService.deleteAttend(id);
+        return ResponseEntity.ok("출결 기록이 삭제되었습니다.");
     }
 }
 

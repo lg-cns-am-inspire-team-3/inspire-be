@@ -17,15 +17,15 @@ public class AttendanceDTO {
     private LocalDate workDate;
     private LocalDateTime checkIn;
     private LocalDateTime checkOut;
-    private Integer workMinute;
+    private Integer wage;
 
     @Builder
-    public AttendanceDTO(Long userId, LocalDate workDate, LocalDateTime checkIn, LocalDateTime checkOut, Integer workMinute) {
+    public AttendanceDTO(Long userId, LocalDate workDate, LocalDateTime checkIn, LocalDateTime checkOut, Integer wage) {
         this.userId = userId;
         this.workDate = workDate;
         this.checkIn = checkIn;
         this.checkOut = checkOut;
-        this.workMinute = workMinute;
+        this.wage = wage;
     }
 
 
@@ -35,7 +35,7 @@ public class AttendanceDTO {
                 .workDate(attend.getWorkDate())
                 .checkIn(attend.getCheckIn())
                 .checkOut(attend.getCheckOut())
-                .workMinute(attend.getWorkMinute())
+                .wage(attend.getWorkMinute())
                 .build();
     }
 }

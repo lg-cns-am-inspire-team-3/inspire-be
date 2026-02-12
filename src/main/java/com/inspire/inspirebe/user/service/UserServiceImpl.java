@@ -1,6 +1,6 @@
 package com.inspire.inspirebe.user.service;
 
-import com.inspire.inspirebe.user.dto.AdminUserUpdateDTO;
+import com.inspire.inspirebe.admin.dto.AdminUserUpdateDTO;
 import com.inspire.inspirebe.user.entity.UserEntity;
 import com.inspire.inspirebe.user.dto.UserCreateDTO;
 import com.inspire.inspirebe.user.dto.UserResponseDTO;
@@ -196,5 +196,11 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("잘못된 비밀번호입니다.");
         }
         return credentials.getUserId();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public UserEntity getReferenceBy(Long id) {
+        return userRepository.getReferenceById(id);
     }
 } // 클래스 끝

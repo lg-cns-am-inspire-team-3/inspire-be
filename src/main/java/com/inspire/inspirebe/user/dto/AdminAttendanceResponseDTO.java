@@ -12,3 +12,10 @@ public class AdminAttendanceResponseDTO {
     private String checkOut;
     private Integer monthlyPay;  // 이번달 예상 급여
 }
+/*
+    private Long userId;
+    private LocalDate workDate;
+    private LocalDateTime checkIn;
+    private LocalDateTime checkOut;
+    private Integer workMinute;
+ */
