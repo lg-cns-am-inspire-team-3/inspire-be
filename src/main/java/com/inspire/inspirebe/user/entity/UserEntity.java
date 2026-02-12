@@ -54,6 +54,17 @@ public class UserEntity extends BaseEntity {
         this.salary = salary;
     }
 
+    @PrePersist
+    public void prePersist() {
+        if(role == null) {
+            role = UserRole.USER;
+        }
+
+        if(status == null) {
+            status = UserStatus.SUSPENDED;
+        }
+    }
+
     public void changeName(String name) {
         this.name = name;
     }
@@ -78,7 +89,17 @@ public class UserEntity extends BaseEntity {
         this.status = UserStatus.valueOf(status.toUpperCase());
     }
 
-    public void activateUser() {
+    /*
+     * 로직이 좋아서 남겨둠
+     * 추후 사용할 수도
+    public void approve() {
+        // 1. 이미 승인된 유저인지 검증 (안전장치)
+        if (this.status == UserStatus.ACTIVE) {
+            throw new IllegalStateException("이미 승인된 사용자입니다.");
+        }
+
+        // 2. 상태를 ACTIVE로 변경
         this.status = UserStatus.ACTIVE;
     }
+     */
 }

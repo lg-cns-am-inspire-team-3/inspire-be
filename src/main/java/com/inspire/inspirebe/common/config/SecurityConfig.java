@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.config.annotation.web.configurers.FormLoginConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HttpBasicConfigurer;
 import org.springframework.security.config.annotation.web.configurers.oauth2.client.OAuth2ClientConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -23,7 +24,7 @@ import java.util.List;
 
 @Configuration
 @RequiredArgsConstructor
-@EnableWebSecurity
+@EnableWebSecurity(debug = true)
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
@@ -47,28 +48,30 @@ public class SecurityConfig {
         return source;
     }
 
+   // 스웨거 작업을 위한 임시 시큐리티 코드
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(CsrfConfigurer::disable)
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/actuator/**","/h2-console/**").permitAll()
-                        .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/api/v1/auth/**").permitAll()
-                        .anyRequest().authenticated()
-                )
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                // temporary for h2-console
-                .headers(headers -> headers
-                        .frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
-                .formLogin(FormLoginConfigurer::disable)
-                .oauth2Client(OAuth2ClientConfigurer::disable);
+public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    http
+        .csrf(CsrfConfigurer::disable) // CSRF 보호 비활성화
+        .cors(cors -> cors.configurationSource(corsConfigurationSource())) // CORS 설정 유지
+        .sessionManagement(session -> session
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션 미사용 유지
+        )
+        .authorizeHttpRequests(auth -> auth
+            // 모든 요청을 인증 없이 허용 (스웨거 및 모든 API 테스트용)
+            .anyRequest().permitAll() 
+        )
+        .headers(headers -> headers
+            .frameOptions(HeadersConfigurer.FrameOptionsConfig::disable) // H2 콘솔 접근용
+        )
+        .formLogin(FormLoginConfigurer::disable)
+        .httpBasic(HttpBasicConfigurer::disable);
 
-        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+    // [중요] 토큰 검증 필터도 일단 주석 처리하거나 빼두는 것이 테스트에 편리합니다.
+    // http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
-        return http.build();
-    }
+    return http.build();
+}
+
+
 }

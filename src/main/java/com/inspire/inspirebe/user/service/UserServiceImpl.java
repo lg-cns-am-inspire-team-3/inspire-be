@@ -1,11 +1,12 @@
 package com.inspire.inspirebe.user.service;
 
-import com.inspire.inspirebe.user.dto.AdminUserUpdateDTO;
+import com.inspire.inspirebe.admin.dto.AdminUserUpdateDTO;
 import com.inspire.inspirebe.user.entity.UserEntity;
 import com.inspire.inspirebe.user.dto.UserCreateDTO;
 import com.inspire.inspirebe.user.dto.UserResponseDTO;
 import com.inspire.inspirebe.user.dto.UserUpdateDTO;
 import com.inspire.inspirebe.user.entity.UserCredentials;
+import com.inspire.inspirebe.user.entity.enums.UserRole;
 import com.inspire.inspirebe.user.entity.enums.UserStatus;
 import com.inspire.inspirebe.user.mapper.UserEntityMapper;
 import com.inspire.inspirebe.user.repository.UserCredentialsRepository;
@@ -69,11 +70,13 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     @Transactional(readOnly = true)
-    public List<UserResponseDTO> getAllUsers(String statusStr) {
+    public List<UserResponseDTO> getAllUsers(String statusStr, String roleStr) {
         UserStatus status = statusStr != null ? UserStatus.valueOf(statusStr.toUpperCase()) : null;
+        UserRole role = roleStr != null ? UserRole.valueOf(roleStr.toUpperCase()) : null;
 
         Specification<UserEntity> spec = Specification
-                .where(UserSpecification.hasStatus(status));
+                .where(UserSpecification.hasStatus(status))
+                .and(UserSpecification.hasRole(role));
 
         return userRepository.findAll(spec)
                 .stream()
@@ -196,5 +199,11 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("잘못된 비밀번호입니다.");
         }
         return credentials.getUserId();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public UserEntity getReferenceBy(Long id) {
+        return userRepository.getReferenceById(id);
     }
 } // 클래스 끝
