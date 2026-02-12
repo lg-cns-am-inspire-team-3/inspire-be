@@ -14,8 +14,8 @@ public class AttendEntityMapper {
                 .userId(attend.getUser().getId())
                 .userName(attend.getUser().getName())
                 .workDate(attend.getWorkDate())
-                .checkIn(attend.getCheckIn())
-                .checkOut(attend.getCheckOut())
+                .checkIn(attend.getCheckIn().toLocalTime())
+                .checkOut(attend.getCheckOut().toLocalTime())
                 .wage(attend.getWorkMinute() * attend.getUser().getSalary() / 60)
                 .build();
     }

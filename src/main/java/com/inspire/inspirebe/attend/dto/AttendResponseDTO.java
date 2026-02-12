@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @NoArgsConstructor
 @Getter
@@ -16,12 +17,12 @@ public class AttendResponseDTO {
     private Long userId;
     private String userName;
     private LocalDate workDate;
-    private LocalDateTime checkIn;
-    private LocalDateTime checkOut;
+    private LocalTime checkIn;
+    private LocalTime checkOut;
     private Integer wage;
 
     @Builder
-    public AttendResponseDTO(Long id, Long userId, String userName, LocalDate workDate, LocalDateTime checkIn, LocalDateTime checkOut, Integer wage){
+    public AttendResponseDTO(Long id, Long userId, String userName, LocalDate workDate, LocalTime checkIn, LocalTime checkOut, Integer wage){
         this.id = id;
         this.userId = userId;
         this.userName = userName;

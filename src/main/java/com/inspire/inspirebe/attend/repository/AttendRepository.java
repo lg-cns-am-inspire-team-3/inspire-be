@@ -23,4 +23,6 @@ public interface AttendRepository extends JpaRepository<Attend, Long>, JpaSpecif
     @EntityGraph(attributePaths = {"user"})
     List<Attend> findAll(Specification<Attend> spec, Sort sort);
     Optional<Attend> findByUserId(Long userId);
+
+    void deleteByUser_Id(Long userId);
 }

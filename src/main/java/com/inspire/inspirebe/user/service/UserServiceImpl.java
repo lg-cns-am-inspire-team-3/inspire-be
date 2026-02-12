@@ -1,6 +1,8 @@
 package com.inspire.inspirebe.user.service;
 
 import com.inspire.inspirebe.admin.dto.AdminUserUpdateDTO;
+import com.inspire.inspirebe.attend.entity.Attend;
+import com.inspire.inspirebe.attend.service.AttendService;
 import com.inspire.inspirebe.user.entity.UserEntity;
 import com.inspire.inspirebe.user.dto.UserCreateDTO;
 import com.inspire.inspirebe.user.dto.UserResponseDTO;
@@ -32,7 +34,6 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserCredentialsRepository credentialsRepository;
     private final PasswordEncoder passwordEncoder;
-
     /**
      * 1. 회원가입 요청
      */

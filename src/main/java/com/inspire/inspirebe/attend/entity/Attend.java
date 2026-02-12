@@ -7,6 +7,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.cglib.core.Local;
 
 import java.sql.Time;
@@ -25,7 +27,8 @@ public class Attend extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false, updatable = false)
+    @JoinColumn(name = "user_id", updatable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private UserEntity user;
 
     @Column(name = "work_date", nullable = false)
@@ -85,6 +88,10 @@ public class Attend extends BaseEntity {
     public void checkOut() {
         checkOut = LocalDateTime.now();
         workMinute = (int) Duration.between(checkIn, checkOut).toMinutes();
+    }
+
+    public void removeUser() {
+        user = null;
     }
 
     public boolean calculatable() {

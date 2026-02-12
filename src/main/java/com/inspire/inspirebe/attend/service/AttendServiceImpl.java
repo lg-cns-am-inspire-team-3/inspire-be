@@ -28,7 +28,6 @@ public class AttendServiceImpl implements AttendService {
     private final AttendRepository attendRepository;
     private final UserService userService;
 
-
     @Override
     public AttendResponseDTO getAttend(Long id) {
         Attend attend = attendRepository.findById(id)

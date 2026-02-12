@@ -31,4 +31,6 @@ public interface AttendService {
     void attend(Long userId, String qrToken);
 
     void validateQrToken(String qrToken);
+
+
 }
