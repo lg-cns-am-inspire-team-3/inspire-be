@@ -8,16 +8,42 @@ import lombok.Setter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 @NoArgsConstructor
 @Getter
 @Setter
+@Schema(description = "출퇴근 기록 응답 DTO")
 public class AttendResponseDTO {
+    @Schema(description = "출퇴근 기록 ID", example = "15")
     private Long id;
+
+    @Schema(description = "사용자 ID", example = "3")
     private Long userId;
+
+    @Schema(description = "사용자 이름", example = "홍길동")
     private String userName;
+
+    @Schema(description = "근무 날짜", example = "2026-02-12")
     private LocalDate workDate;
+
+    @Schema(
+            description = "출근 시간",
+            example = "2026-02-12T09:00:00"
+    )
     private LocalDateTime checkIn;
+
+    @Schema(
+            description = "퇴근 시간 (퇴근 전에는 null 가능)",
+            example = "2026-02-12T18:00:00",
+            nullable = true
+    )
     private LocalDateTime checkOut;
+
+    @Schema(
+            description = "해당 근무에 대한 예상 지급 급여 (원 단위)",
+            example = "80000"
+    )
     private Integer wage;
 
     @Builder
