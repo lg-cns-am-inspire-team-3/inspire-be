@@ -39,8 +39,3 @@ server:
 
 frontend:
   url: "http://localhost:3000"
-
-management:
-  health:
-    redis:
-      enabled: false

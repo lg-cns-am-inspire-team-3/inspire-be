@@ -20,8 +20,10 @@ public class AttendController {
     private final AttendService attendService;
 
     @GetMapping("/me")
-    public ResponseEntity<List<AttendResponseDTO>> getAttends(@AuthenticationPrincipal Long userId) {
-        return ResponseEntity.ok(attendService.getAllAttends(userId, null, null));
+    public ResponseEntity<List<AttendResponseDTO>> getAttends(@AuthenticationPrincipal Long userId,
+                                                              @RequestParam("year") Integer year,
+                                                              @RequestParam("month") Integer month) {
+        return ResponseEntity.ok(attendService.getAllAttends(userId, year, month));
     }
     
     @PostMapping("/check")
