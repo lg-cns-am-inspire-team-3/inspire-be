@@ -1,12 +1,9 @@
 package com.inspire.inspirebe.attend.service;
 
-import com.inspire.inspirebe.attend.dto.AttendRequestDTO;
 import com.inspire.inspirebe.attend.dto.AttendResponseDTO;
 import com.inspire.inspirebe.attend.dto.AttendUpdateDTO;
-import com.inspire.inspirebe.user.dto.AdminAttendanceResponseDTO;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
 

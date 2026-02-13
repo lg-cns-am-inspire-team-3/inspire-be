@@ -22,8 +22,6 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Auth", description = "인증 관련 API (로그인, 로그아웃, 토큰 재발급)")
 public class AuthController {
 
-    @Value("${frontend.url}")
-    private String frontendURL;
     private final AuthService authService;
 
     @Operation(summary = "사용자 로그인", description = "아이디와 비밀번호로 로그인합니다. 성공 시 쿠키에 Refresh Token이 설정됩니다.")

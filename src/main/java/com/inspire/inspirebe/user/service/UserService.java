@@ -38,8 +38,6 @@ public interface UserService {
 
     void updatePassword(Long id, String oldPassword, String newPassword);
 
-    List<UserResponseDTO> getSuspendedUsers();
-
     // Delete
     void deleteUser(Long id);
 

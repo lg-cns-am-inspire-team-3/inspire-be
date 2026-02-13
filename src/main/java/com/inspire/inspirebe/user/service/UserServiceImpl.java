@@ -101,19 +101,6 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * 5. 승인 대기 유저 조회
-     */
-    @Override
-    @Transactional(readOnly = true)
-    public List<UserResponseDTO> getSuspendedUsers() {
-        return userRepository.findByStatus(UserStatus.SUSPENDED)
-                .stream()
-                .map(UserEntityMapper::toResponse)
-                .toList();
-    }
-
-
-    /**
      * 6. 특정 유저 삭제
      */
     @Override
@@ -203,5 +190,11 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("잘못된 비밀번호입니다.");
         }
         return credentials.getUserId();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public UserEntity getReferenceBy(Long id) {
+        return userRepository.getReferenceById(id);
     }
 } // 클래스 끝

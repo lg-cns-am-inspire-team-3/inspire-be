@@ -2,9 +2,6 @@ package com.inspire.inspirebe.attend.mapper;
 
 import com.inspire.inspirebe.attend.dto.AttendResponseDTO;
 import com.inspire.inspirebe.attend.entity.Attend;
-import com.inspire.inspirebe.user.dto.UserCreateDTO;
-import com.inspire.inspirebe.user.dto.UserResponseDTO;
-import com.inspire.inspirebe.user.entity.UserEntity;
 
 public class AttendEntityMapper {
 

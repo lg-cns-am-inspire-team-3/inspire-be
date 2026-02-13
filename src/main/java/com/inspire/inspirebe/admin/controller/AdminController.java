@@ -1,7 +1,9 @@
 package com.inspire.inspirebe.admin.controller;
 
+import com.inspire.inspirebe.attend.dto.AttendResponseDTO;
+import com.inspire.inspirebe.attend.dto.AttendUpdateDTO;
 import com.inspire.inspirebe.attend.service.AttendService;
-import com.inspire.inspirebe.user.dto.AdminUserUpdateDTO;
+import com.inspire.inspirebe.admin.dto.AdminUserUpdateDTO;
 import com.inspire.inspirebe.user.dto.UserResponseDTO;
 import com.inspire.inspirebe.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
