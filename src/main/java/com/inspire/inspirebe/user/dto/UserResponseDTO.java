@@ -21,12 +21,6 @@ public class UserResponseDTO {
     private Long id;
 
     @Schema(
-            description = "로그인 아이디",
-            example = "seungjun123"
-    )
-    private String loginId;
-
-    @Schema(
             description = "이메일 주소",
             example = "test@email.com",
             format = "email"
@@ -60,9 +54,8 @@ public class UserResponseDTO {
     private Integer salary;
 
     @Builder
-    public UserResponseDTO(Long id, String loginId, String email, String name, String contact, String address, Integer salary) {
+    public UserResponseDTO(Long id, String email, String name, String contact, String address, Integer salary) {
         this.id = id;
-        this.loginId = loginId;
         this.email = email;
         this.name = name;
         this.contact = contact;
