@@ -34,6 +34,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserCredentialsRepository credentialsRepository;
     private final PasswordEncoder passwordEncoder;
+
     /**
      * 1. 회원가입 요청
      */
@@ -167,14 +168,6 @@ public class UserServiceImpl implements UserService {
         UserEntity userEntity = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 유저입니다."));
 
-        log.info("user update dto");
-        log.info("status : {}", userUpdateDTO.getStatus().getValue());
-        log.info("name : {}", userUpdateDTO.getName().getValue());
-        log.info("email : {}", userUpdateDTO.getEmail().getValue());
-        log.info("contact : {}", userUpdateDTO.getContact().getValue());
-        log.info("address : {}", userUpdateDTO.getAddress().getValue());
-        log.info("salary : {}", userUpdateDTO.getSalary().getValue());
-
         applyCommonUpdate(userEntity, userUpdateDTO);
         userUpdateDTO.getSalary().ifPresent(userEntity::changeSalary);
         userUpdateDTO.getStatus().ifPresent(userEntity::changeUserStatus);
@@ -210,11 +203,5 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("잘못된 비밀번호입니다.");
         }
         return credentials.getUserId();
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public UserEntity getReferenceBy(Long id) {
-        return userRepository.getReferenceById(id);
     }
 } // 클래스 끝

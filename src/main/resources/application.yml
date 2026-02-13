@@ -22,3 +22,5 @@ jwt:
   refresh:
     secret: "yeonjin-inspire-project-refresh-key-2026-fighting-fighting"
     expires: 1209600000 
+
+    
